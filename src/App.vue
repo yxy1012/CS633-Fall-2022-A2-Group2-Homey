@@ -1,12 +1,19 @@
 <template>
   <div id="app">
+    <HomeHead></HomeHead>
     <router-view></router-view>
+    <PageFooter></PageFooter>
+    <CopyRight></CopyRight>
   </div>
 </template>
 
 <script>
+import HomeHead from "@/components/common/HomeHead";
+import PageFooter from "@/components/common/PageFooter";
+import CopyRight from "@/components/common/CopyRight";
 export default {
   name: 'App',
+  components: {CopyRight, PageFooter, HomeHead},
 }
 </script>
 
