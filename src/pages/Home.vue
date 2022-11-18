@@ -23,15 +23,6 @@ export default {
   components: {Brands, TrendingPro, UniquePro, HomeyOffer, LatestPro, FeaturedPro, AdvCarousel},
   data(){
     return {
-      user:{
-        username: 'xinyuy@bu.edu'
-      },
-      phone: '(617)717-2771',
-      login: 'Login',
-      wishlist: 'Wishlist',
-      activeIndex: '1-1',
-      logoUrl: require('../assets/logo.png'),
-      searchContent:'',
       advList:[
         require('../assets/advImage1.png'),
         require('../assets/advImage1.png'),

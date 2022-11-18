@@ -9,8 +9,10 @@
         <el-row>
           <el-input placeholder="Enter Email Address" style="width: 60%; float: left;"></el-input>
           <el-button style="float: left; width: 35%; position: relative; right: 12px;
-          background-color: #e628a6; color: #FFFFFF">
-            Sign up
+          background-color: #e628a6;">
+            <router-link to="register" style="text-decoration: none;color: #FFFFFF">
+              Sign up
+            </router-link>
           </el-button>
         </el-row>
         <el-row>

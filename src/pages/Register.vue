@@ -14,14 +14,20 @@
               </el-form-item>
               <el-form-item>
                 <el-input placeholder="Password" v-model="form.password" show-password></el-input>
-                <a href="javascript:void(0);" class="forgot">{{ forgotPass }}</a>
+              </el-form-item>
+              <el-form-item>
+                <el-input placeholder="Confirm Password" v-model="form.confirmPassword" show-password></el-input>
+              </el-form-item>
+              <el-form-item>
                 <el-button style="background-color: #e628a6; color: #FFFFFF; width: 100%">
                   {{ btnTitle }}
                 </el-button>
               </el-form-item>
               <el-form-item>
-                <span class="darkGrey">{{ noAccount }}</span>
-                <router-link to="register">{{ createAccount }}</router-link>
+                <span class="darkGrey">{{ haveAccount }}</span>
+                <router-link to="login">
+                  {{ goSignIn }}
+                </router-link>
               </el-form-item>
             </el-form>
           </el-card>
@@ -35,21 +41,21 @@
 <script>
 import Brands from "@/components/common/Brands";
 export default {
-  name: "Login.vue",
+  name: "Register",
   components: {Brands},
   data(){
     return{
       myAccount: require("@/assets/myAccount.png"),
-      formTitle: "Login",
-      hint: "Please login using account detail below.",
+      formTitle: "Register",
+      hint: "Please register by creating account below.",
       form: {
         email: "",
-        password: ""
+        password: "",
+        confirmPassword: ""
       },
-      forgotPass: "Forgot your password?",
-      btnTitle: "Sign In",
-      noAccount: "Don't have an account?",
-      createAccount: "Create account"
+      btnTitle: "Sign Up",
+      haveAccount: "Already have an account?",
+      goSignIn: "Go to sign in"
     }
   }
 }
@@ -69,8 +75,5 @@ export default {
 a{
   color: darkgrey;
   text-decoration: none;
-}
-.forgot{
-  float: left;
 }
 </style>

@@ -22,7 +22,7 @@
           <el-image :src="logoUrl" style="width: 180px; height: 50px"></el-image>
         </el-menu-item>
         <el-menu-item index="/">Home</el-menu-item>
-        <el-menu-item index="2" :key="1">Pages</el-menu-item>
+        <el-menu-item index="2">Pages</el-menu-item>
         <el-menu-item index="3">Products</el-menu-item>
         <el-menu-item index="4">Blog</el-menu-item>
         <el-menu-item index="5">Shop</el-menu-item>
