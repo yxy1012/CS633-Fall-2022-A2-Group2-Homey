@@ -4,6 +4,7 @@ import Home from '@/pages/Home'
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import register from "@/pages/Register";
+import ShopCatalog from "@/pages/ShopCatalog";
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -27,6 +28,13 @@ export default new VueRouter({
             component: Register,
             meta:{
                 title: 'register'
+            }
+        },
+        {
+            path: '/shopCatalog',
+            component: ShopCatalog,
+            meta:{
+                title: 'shopCatalog'
             }
         }
     ]
