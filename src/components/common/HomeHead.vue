@@ -22,11 +22,10 @@
           <el-image :src="logoUrl" style="width: 180px; height: 50px"></el-image>
         </el-menu-item>
         <el-menu-item index="/">Home</el-menu-item>
-        <el-menu-item index="2">Pages</el-menu-item>
-        <el-menu-item index="3">Products</el-menu-item>
-        <el-menu-item index="4">Blog</el-menu-item>
-        <el-menu-item index="5">Shop</el-menu-item>
-        <el-menu-item index="6">Contact</el-menu-item>
+        <el-menu-item index="/shopCatalog">Shop</el-menu-item>
+        <el-menu-item index="3">My Orders</el-menu-item>
+        <el-menu-item index="4">FAQ</el-menu-item>
+        <el-menu-item index="5">Contact Us</el-menu-item>
         <el-menu-item class="searchArea">
           <el-input v-model="searchContent" placeholder="" class="searchInput"></el-input>
           <el-button style="background-color: #e628a6;
