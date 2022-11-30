@@ -15,6 +15,7 @@ public class OrderDetailsController {
 
     @RequestMapping("/findAll")
     public List<OrderDetails> findAll(){
+        System.out.println("1");
         return orderDetailsRepository.findAll();
     }
 
