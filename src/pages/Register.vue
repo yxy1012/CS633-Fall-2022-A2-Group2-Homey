@@ -34,15 +34,12 @@
         </el-col>
       </el-row>
     </div>
-    <Brands></Brands>
   </div>
 </template>
 
 <script>
-import Brands from "@/components/common/Brands";
 export default {
   name: "Register",
-  components: {Brands},
   data(){
     return{
       myAccount: require("@/assets/myAccount.png"),

@@ -2,6 +2,7 @@
   <div id="app">
     <HomeHead></HomeHead>
     <router-view></router-view>
+    <Brands></Brands>
     <PageFooter></PageFooter>
     <CopyRight></CopyRight>
   </div>
@@ -11,9 +12,10 @@
 import HomeHead from "@/components/common/HomeHead";
 import PageFooter from "@/components/common/PageFooter";
 import CopyRight from "@/components/common/CopyRight";
+import Brands from "@/components/common/Brands";
 export default {
   name: 'App',
-  components: {CopyRight, PageFooter, HomeHead},
+  components: {CopyRight, PageFooter, HomeHead, Brands},
 }
 </script>
 

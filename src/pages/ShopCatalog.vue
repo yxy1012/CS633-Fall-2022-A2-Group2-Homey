@@ -35,15 +35,12 @@
         </el-col>
       </el-row>
     </div>
-    <Brands></Brands>
   </div>
 </template>
 
 <script>
-import Brands from "@/components/common/Brands";
 export default {
   name: "ShopCatalog",
-  components: {Brands},
   data(){
     return{
       shopCatalog: require('@/assets/shopCatalog.png'),
