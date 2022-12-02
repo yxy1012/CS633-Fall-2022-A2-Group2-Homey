@@ -9,18 +9,20 @@
           <el-row>
             <el-col :span="3"><div class="grid-content"></div></el-col>
             <el-col :span="4" v-for="(item, index) in featuredList" :key="index" class="advCard">
-              <el-card :body-style="{ padding: '0px' }">
-                <el-image :src="item.image"></el-image>
-                <div class="featuredDetail">
-                  <h4>{{ item.name }}</h4>
-                  <div>
-                    {{ item.id }}
+              <router-link to="/productDetails" style="text-decoration: none">
+                <el-card :body-style="{ padding: '0px' }">
+                  <el-image :src="item.image"></el-image>
+                  <div class="featuredDetail">
+                    <h4>{{ item.name }}</h4>
+                    <div>
+                      {{ item.id }}
+                    </div>
+                    <div>
+                      {{ item.price }}
+                    </div>
                   </div>
-                  <div>
-                    {{ item.price }}
-                  </div>
-                </div>
-              </el-card>
+                </el-card>
+              </router-link>
             </el-col>
           </el-row>
         </el-carousel-item>

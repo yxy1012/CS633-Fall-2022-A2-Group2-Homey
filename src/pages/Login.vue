@@ -28,15 +28,12 @@
         </el-col>
       </el-row>
     </div>
-    <Brands></Brands>
   </div>
 </template>
 
 <script>
-import Brands from "@/components/common/Brands";
 export default {
   name: "Login.vue",
-  components: {Brands},
   data(){
     return{
       myAccount: require("@/assets/myAccount.png"),

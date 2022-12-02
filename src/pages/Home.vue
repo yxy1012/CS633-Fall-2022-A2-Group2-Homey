@@ -6,7 +6,6 @@
   <HomeyOffer :homey-offers="homeyOffers"></HomeyOffer>
   <UniquePro :unique-product="uniqueProduct"></UniquePro>
   <TrendingPro :trending-list="trendingList" :trend-card1="trendCard1" :trend-card2="trendCard2" :side-list="sideList"></TrendingPro>
-  <Brands></Brands>
 </div>
 </template>
 
@@ -17,10 +16,9 @@ import LatestPro from "@/components/Home/LatestPro";
 import HomeyOffer from "@/components/Home/HomeyOffer";
 import UniquePro from "@/components/Home/UniquePro";
 import TrendingPro from "@/components/Home/TrendingPro";
-import Brands from "@/components/common/Brands";
 export default {
   name: "Home",
-  components: {Brands, TrendingPro, UniquePro, HomeyOffer, LatestPro, FeaturedPro, AdvCarousel},
+  components: {TrendingPro, UniquePro, HomeyOffer, LatestPro, FeaturedPro, AdvCarousel},
   data(){
     return {
       advList:[

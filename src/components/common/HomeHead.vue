@@ -7,23 +7,33 @@
         <el-col :span="3"><div class="grid-content"><i class="el-icon-phone-outline r-spacing"></i>{{ phone }}</div></el-col>
         <el-col :span="7"><div class="grid-content"></div></el-col>
         <el-col :span="1">
-          <router-link to="/login">
+          <router-link to="/login" style="text-decoration: none">
             <div class="grid-content">{{ login }}<i class="el-icon-user l-spacing"></i></div>
           </router-link>
         </el-col>
-        <el-col :span="2"><div class="grid-content">{{ wishlist }}<i class="el-icon-star-off l-spacing"></i></div></el-col>
-        <el-col :span="1"><div class="grid-content chartIcon"><i class="el-icon-shopping-cart-2"></i></div></el-col>
+        <el-col :span="2">
+          <router-link to="/wishlist" style="text-decoration: none">
+            <div class="grid-content">{{ wishlist }}<i class="iconfont icon-aixin l-spacing"></i></div>
+          </router-link>
+        </el-col>
+        <el-col :span="1">
+          <router-link to="/shoppingCart" style="text-decoration: none">
+            <div class="grid-content chartIcon"><i class="el-icon-shopping-cart-2"></i></div>
+          </router-link>
+        </el-col>
         <el-col :span="2"><div class="grid-content"></div></el-col>
       </el-row>
     </div>
     <div class="topMenu">
       <el-menu :default-active="this.$router.path"  router class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <el-menu-item class="logoArea">
-          <el-image :src="logoUrl" style="width: 180px; height: 50px"></el-image>
+          <router-link to="/">
+            <el-image :src="logoUrl" style="width: 180px; height: 50px"></el-image>
+          </router-link>
         </el-menu-item>
         <el-menu-item index="/">Home</el-menu-item>
         <el-menu-item index="/shopCatalog">Shop</el-menu-item>
-        <el-menu-item index="3">My Orders</el-menu-item>
+        <el-menu-item index="/myOrder">My Orders</el-menu-item>
         <el-menu-item index="4">FAQ</el-menu-item>
         <el-menu-item index="5">Contact Us</el-menu-item>
         <el-menu-item class="searchArea">
