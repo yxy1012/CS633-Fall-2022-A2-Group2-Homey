@@ -39,17 +39,33 @@ public class ShoppingcartsController {
     }
 
     @PutMapping("/update")
-    public String update(@RequestBody Shoppingcarts shoppingcarts){
-        Shoppingcarts result = shoppingcartsRepository.save(shoppingcarts);
-        if (result != null){
-            return "success";
-        }else{
-            return "error";
+    public String update(@RequestBody List<Shoppingcarts> list){
+        for(int i = 0; i < list.size(); i++){
+            Shoppingcarts shoppingcarts = list.get(i);
+            Shoppingcarts result = shoppingcartsRepository.save(shoppingcarts);
+            if (result == null){
+                return "error";
+            }
         }
+        return "success";
     }
 
     @DeleteMapping("/deleteById/{id}")
     public void deleteById(@PathVariable("id") Integer id){
         shoppingcartsRepository.deleteById(id);
+    }
+
+    @PutMapping("/deleteAll")
+    public void deleteAll(@RequestBody List<Shoppingcarts> list){
+        System.out.println(list);
+        for(int i = 0; i < list.size(); i++){
+            Shoppingcarts shoppingcarts = list.get(i);
+            shoppingcartsRepository.deleteById(shoppingcarts.getId());
+        }
+    }
+
+    @GetMapping("/findByUserId/{id}")
+    public List<Shoppingcarts> findByUserId(@PathVariable("id") Integer id){
+        return shoppingcartsRepository.findByUser_id(id);
     }
 }

@@ -3,15 +3,22 @@
     <div class="pageHeader">
       <el-row>
         <el-col :span="5"><div class="grid-content"></div></el-col>
-        <el-col :span="3"><div class="grid-content"><i class="el-icon-message r-spacing"></i>{{ user.username }}</div></el-col>
-        <el-col :span="3"><div class="grid-content"><i class="el-icon-phone-outline r-spacing"></i>{{ phone }}</div></el-col>
-        <el-col :span="7"><div class="grid-content"></div></el-col>
-        <el-col :span="1">
+        <el-col :span="3">
+          <div class="grid-content">
+            <i class="el-icon-message r-spacing" v-if="this.$store.getters.getEmail"></i>{{ this.$store.getters.getEmail }}
+          </div>
+        </el-col>
+<!--        <el-col :span="3"><div class="grid-content"><i class="el-icon-phone-outline r-spacing"></i>{{ phone }}</div></el-col>-->
+        <el-col :span="8"><div class="grid-content"></div></el-col>
+        <el-col :span="3">
           <router-link to="/login" style="text-decoration: none">
-            <div class="grid-content">{{ login }}<i class="el-icon-user l-spacing"></i></div>
+            <div class="grid-content" v-if="this.$store.getters.getEmail" @click="loginOut">
+              {{signOut}}<i class="el-icon-user l-spacing"></i>
+            </div>
+            <div class="grid-content" v-else>{{login}}<i class="el-icon-user l-spacing"></i></div>
           </router-link>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="2" v-if="this.$store.getters.getEmail">
           <router-link to="/wishlist" style="text-decoration: none">
             <div class="grid-content">{{ wishlist }}<i class="iconfont icon-aixin l-spacing"></i></div>
           </router-link>
@@ -25,7 +32,7 @@
       </el-row>
     </div>
     <div class="topMenu">
-      <el-menu :default-active="this.$router.path"  router class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu :default-active="this.$router.path"  router class="el-menu-demo" mode="horizontal">
         <el-menu-item class="logoArea">
           <router-link to="/">
             <el-image :src="logoUrl" style="width: 180px; height: 50px"></el-image>
@@ -53,11 +60,9 @@ export default {
   name: "HomeHead",
   data(){
     return{
-      user:{
-        username: 'xinyuy@bu.edu'
-      },
       phone: '(617)717-2771',
       login: 'Login',
+      signOut: 'Sign Out',
       wishlist: 'Wishlist',
       activeIndex: '1-1',
       logoUrl: require('../../assets/logo.png'),
@@ -65,8 +70,11 @@ export default {
     }
   },
   methods:{
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+    loginOut(){
+      this.$store.commit('setUserId',null)
+      this.$store.commit('setEmail',null)
+      sessionStorage.removeItem('userId')
+      sessionStorage.removeItem('email')
     }
   }
 }

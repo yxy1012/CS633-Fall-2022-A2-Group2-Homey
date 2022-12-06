@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/homey?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
-    password: soviet1917
+    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true

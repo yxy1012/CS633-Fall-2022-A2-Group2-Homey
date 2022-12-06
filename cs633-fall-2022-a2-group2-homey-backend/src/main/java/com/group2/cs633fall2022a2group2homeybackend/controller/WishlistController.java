@@ -1,13 +1,13 @@
 package com.group2.cs633fall2022a2group2homeybackend.controller;
 
-import com.group2.cs633fall2022a2group2homeybackend.entity.Shoppingcarts;
+import com.group2.cs633fall2022a2group2homeybackend.entity.Product;
 import com.group2.cs633fall2022a2group2homeybackend.entity.Wishlist;
 import com.group2.cs633fall2022a2group2homeybackend.repository.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/wishlist")
@@ -47,8 +47,13 @@ public class WishlistController {
     }
 
     @DeleteMapping("/deleteById/{id}")
-    public void deleteById(@PathVariable("id") Integer id){
-        System.out.println("delete");
+    public boolean deleteById(@PathVariable("id") Integer id){
         wishlistRepository.deleteById(id);
+        return true;
+    }
+
+    @GetMapping("/findByUserId/{id}")
+    public List<Wishlist> findByUserId(@PathVariable("id") Integer id){
+        return wishlistRepository.findByUser_id(id);
     }
 }

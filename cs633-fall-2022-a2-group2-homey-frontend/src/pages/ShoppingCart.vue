@@ -20,10 +20,10 @@
                       <el-image :src="deleteCartItem" style="width: 30%"></el-image>
                     </el-link>
                   </div>
-                  <el-image :src="slotProps.row.shoppingCartItemImage"></el-image>
+                  <el-image :src="slotProps.row.product.image"></el-image>
                 </el-col>
-                <el-col :span="12" style="padding-top: 12%; color: #000000; ">
-                  <h4>{{ slotProps.row.name }}</h4>
+                <el-col :span="12" style="color: #000000; ">
+                  <h4>{{ slotProps.row.product.name }}</h4>
                 </el-col>
               </el-row>
             </template>
@@ -33,7 +33,7 @@
               <h2 style="color: black">Price</h2>
             </template>
             <template v-slot:default="slotProps">
-              {{ "$" + slotProps.row.price }}
+              {{ "$" + slotProps.row.product.price }}
             </template>
           </el-table-column>
           <el-table-column width="180">
@@ -49,26 +49,25 @@
               <h2 style="color: black">Total</h2>
             </template>
             <template v-slot:default="slotProps">
-              {{ "$" + slotProps.row.price * slotProps.row.quantity }}
+              {{ "$" + slotProps.row.product.price * slotProps.row.quantity }}
             </template>
           </el-table-column>
         </el-table>
         <el-row style="margin-top: 5%">
           <el-col :span="5">
-            <el-button style="background-color: #e628a6; color: #FFFFFF; width: 100%">
+            <el-button style="background-color: #e628a6; color: #FFFFFF; width: 100%" @click="update">
               Update Cart
             </el-button>
           </el-col>
           <el-col :span="14"><div class="grid-content"></div></el-col>
           <el-col :span="5">
-            <el-button style="background-color: #e628a6; color: #FFFFFF; width: 100%"
-            @click="clear">
+            <el-button style="background-color: #e628a6; color: #FFFFFF; width: 100%" @click="clear">
               Clear Cart
             </el-button>
           </el-col>
         </el-row>
       </el-col>
-      <el-col :span="6" style="padding-top: 15%">
+      <el-col :span="6">
         <h3>Cart Totals</h3>
         <el-card style="background-color: #f1f0fe">
           <el-row>
@@ -116,59 +115,109 @@ export default {
       deleteCartItem: require("@/assets/deleteCartItem.png"),
       emptyText: "No Item",
       tableData: [{
-        name: 'Bermund Chair',
-        shoppingCartItemImage: require("@/assets/shoppingCartItem.png"),
-        price: 26.00,
+        id: 1,
         quantity: 2,
-        total: 26.00
-      }, {
-        name: 'Bermund Chair',
-        shoppingCartItemImage: require("@/assets/shoppingCartItem.png"),
-        price: 26.00,
-        quantity: 1,
-        total: 26.00
-      }, {
-        name: 'Bermund Chair',
-        shoppingCartItemImage: require("@/assets/shoppingCartItem.png"),
-        price: 26.00,
-        quantity: 1,
-        total: 26.00
-      }, {
-        name: 'Bermund Chair',
-        shoppingCartItemImage: require("@/assets/shoppingCartItem.png"),
-        price: 26.00,
-        quantity: 1,
-        total: 26.00
+        product:{
+          id: 2,
+          name: "B&B Italian Sofa",
+          quantity: 2,
+          price: 135.0,
+          original_price: null,
+          description: "After a good night's sleep, you can effortlessly convert your bedroom or guest room into a living room again.",
+          image: "http://localhost:8181/images/wishItem2.png"
+        },
+        user:{
+          id: 0
+        }
       }],
       tip: require("@/assets/tip.png")
     }
+  },
+  created () {
+    const _this=this
+    axios.get('http://localhost:8181/shoppingcarts/findByUserId/' + this.$store.getters.getUserId).then(function (resp) {
+      console.log(resp)
+      _this.tableData = resp.data
+    })
   },
   methods: {
     handleChange(value) {
       console.log(value);
     },
     deleteItem(index){
-      this.tableData.splice(index, 1);
+      this.$confirm('Delete this item?', 'Warning', {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        let id = this.tableData[index].id;
+        const _this=this
+        axios.delete('http://localhost:8181/shoppingcarts/deleteById/' + id).then(function (resp){
+          _this.tableData.splice(index, 1);
+        })
+        this.$message({
+          type: 'success',
+          message: 'Delete Successfully'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Cancel Deleting'
+        });
+      });
     },
     clear(){
-      this.tableData = [];
+      const _this = this
+      this.$confirm('Clear this cart?', 'Warning', {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        axios.put('http://localhost:8181/shoppingcarts/deleteAll', this.tableData).then(function (resp){
+          _this.tableData = [];
+        })
+        this.$message({
+          type: 'success',
+          message: 'Delete Successfully'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Cancel Clearing'
+        });
+      });
     },
     toCheckout(){
       this.$router.push("/checkout");
+    },
+    update(){
+      const _this = this
+      axios.put('http://localhost:8181/shoppingcarts/update', this.tableData).then(function (resp){
+        console.log(resp)
+        if(resp.data == "success"){
+          _this.$alert('Update Successfully','Info',{
+            confirmButtonText:'OK'
+          });
+        }else{
+          _this.$alert('Fail to Update','Warning',{
+            confirmButtonText:'OK'
+          });
+        }
+      })
     }
   },
   computed: {
     subTotals: function (){
       let sum = 0;
       this.tableData.forEach(item => {
-        sum += item.price * item.quantity
+        sum += item.product.price * item.quantity
       })
       return sum;
     },
     totals: function (){
       let sum = 0;
       this.tableData.forEach(item => {
-        sum += item.price * item.quantity
+        sum += item.product.price * item.quantity
       })
       return sum;
     }
