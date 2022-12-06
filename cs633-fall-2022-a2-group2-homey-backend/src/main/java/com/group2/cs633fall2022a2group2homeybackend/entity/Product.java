@@ -15,7 +15,8 @@ public class Product {
     private Integer id;
     private String name;
     private Integer quantity;
-    private float price;
+    private Float price;
+    private Float original_price;
     private String description;
-
+    private String image;
 }
