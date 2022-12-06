@@ -23,7 +23,7 @@
             <div class="grid-content">{{ wishlist }}<i class="iconfont icon-aixin l-spacing"></i></div>
           </router-link>
         </el-col>
-        <el-col :span="1">
+        <el-col :span="1" v-if="this.$store.getters.getEmail">
           <router-link to="/shoppingCart" style="text-decoration: none">
             <div class="grid-content chartIcon"><i class="el-icon-shopping-cart-2"></i></div>
           </router-link>
