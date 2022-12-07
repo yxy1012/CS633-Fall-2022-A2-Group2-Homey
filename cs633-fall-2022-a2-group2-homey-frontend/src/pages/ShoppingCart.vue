@@ -33,10 +33,10 @@
               <h2 style="color: black">Price</h2>
             </template>
             <template v-slot:default="slotProps">
-              {{ "$" + slotProps.row.product.price }}
+              {{ slotProps.row.product.price ? "$" + slotProps.row.product.price.toFixed(2) : "$" + slotProps.row.product.price }}
             </template>
           </el-table-column>
-          <el-table-column width="180">
+          <el-table-column width="170">
             <template slot="header">
               <h2 style="color: black">Quantity</h2>
             </template>
@@ -44,12 +44,14 @@
               <el-input-number v-model="slotProps.row.quantity" @change="handleChange" :min="1" :max="15" size="mini"></el-input-number>
             </template>
           </el-table-column>
-          <el-table-column width="70">
+          <el-table-column width="80">
             <template slot="header">
               <h2 style="color: black">Total</h2>
             </template>
             <template v-slot:default="slotProps">
-              {{ "$" + slotProps.row.product.price * slotProps.row.quantity }}
+              {{ slotProps.row.product.price * slotProps.row.quantity ?
+                "$" + (slotProps.row.product.price * slotProps.row.quantity).toFixed(2) :
+                "$" + slotProps.row.product.price * slotProps.row.quantity}}
             </template>
           </el-table-column>
         </el-table>
@@ -76,7 +78,7 @@
             </el-col>
             <el-col :span="12"><div class="grid-content"></div></el-col>
             <el-col :span="6" style="padding-top: 6%">
-              {{ "$" + subTotals }}
+              {{ subTotals?  "$" + subTotals.toFixed(2) : "$" + subTotals}}
             </el-col>
           </el-row>
           <div class="bottom-line"></div>
@@ -86,7 +88,7 @@
             </el-col>
             <el-col :span="12"><div class="grid-content"></div></el-col>
             <el-col :span="6" style="padding-top: 6%">
-              {{ "$" + totals }}
+              {{ totals ? "$" + totals.toFixed(2) : "$" + totals}}
             </el-col>
           </el-row>
           <div class="bottom-line"></div>
@@ -188,7 +190,18 @@ export default {
       });
     },
     toCheckout(){
-      this.$router.push("/checkout");
+      if(this.tableData.length > 0){
+        this.$router.push({
+          name: "checkout",
+          params: {
+            shoppingcarts: this.tableData
+          }
+        })
+      }else{
+        this.$alert('No Items in the Shopping Cart','Warning',{
+          confirmButtonText:'OK'
+        });
+      }
     },
     update(){
       const _this = this

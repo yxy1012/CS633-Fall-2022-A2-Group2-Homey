@@ -14,7 +14,7 @@
         </ul>
         <el-row>
           <el-col :span="6">
-            <el-button style="background-color: #e628a6; color: #FFFFFF">
+            <el-button style="background-color: #e628a6; color: #FFFFFF" @click="addToCart">
               Add To Cart
             </el-button>
           </el-col>
@@ -37,6 +37,27 @@ export default {
       default: function(){
         return {};
       }
+    }
+  },
+  methods: {
+    addToCart(){
+      let shoppingcart = {
+        user: {id: this.$store.getters.getUserId},
+        product: {id: this.uniqueProduct.id},
+        quantity: 1
+      };
+      const _this = this
+      axios.post('http://localhost:8181/shoppingcarts/save', shoppingcart).then(function (resp){
+        if(resp.data == "success"){
+          _this.$alert('Add Successfully','Info',{
+            confirmButtonText:'OK'
+          });
+        }else{
+          _this.$alert('Fail to Add','Warning',{
+            confirmButtonText:'OK'
+          });
+        }
+      })
     }
   }
 }

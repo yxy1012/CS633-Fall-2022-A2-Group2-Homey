@@ -7,12 +7,10 @@
           <h1 style="float: left">Homey</h1>
         </el-row>
         <el-row>
-          <el-input placeholder="Enter Email Address" style="width: 60%; float: left;"></el-input>
+          <el-input placeholder="Enter Email Address" style="width: 60%; float: left;" v-model="email"></el-input>
           <el-button style="float: left; width: 35%; position: relative; right: 12px;
-          background-color: #e628a6;">
-            <router-link to="register" style="text-decoration: none;color: #FFFFFF">
+          background-color: #e628a6; color: #FFFFFF" @click="goToRegister">
               Sign up
-            </router-link>
           </el-button>
         </el-row>
         <el-row>
@@ -72,7 +70,23 @@
 
 <script>
 export default {
-  name: "PageFooter"
+  name: "PageFooter",
+  data() {
+    return {
+      email:''
+    }
+  },
+  methods : {
+    goToRegister(){
+      this.$router.push({
+        name: "register",
+        query: {
+          email: this.email
+        }
+      });
+      this.email = ''
+    }
+  }
 }
 </script>
 

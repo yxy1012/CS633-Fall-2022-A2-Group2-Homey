@@ -65,8 +65,8 @@ export default {
         product:{
           name: "Mustard Chair",
           image: require("@/assets/wishItem1.png"),
-          price: "$42.00",
-          original_price: "$65.00",
+          price: 42.00,
+          original_price: 65.00,
           description: "Thanks to new research and a new technique, this upholstered chair gives you optimal seating comfort."
         }
       }]

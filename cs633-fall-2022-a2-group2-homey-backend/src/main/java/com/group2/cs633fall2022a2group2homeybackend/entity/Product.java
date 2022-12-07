@@ -19,4 +19,6 @@ public class Product {
     private Float original_price;
     private String description;
     private String image;
+    private Integer type;
+    private String code;
 }

@@ -38,6 +38,7 @@ export default new VueRouter({
         },
         {
             path: '/register',
+            name: 'register',
             component: Register,
             meta:{
                 title: 'register'
@@ -80,6 +81,7 @@ export default new VueRouter({
         },
         {
             path: '/checkout',
+            name: 'checkout',
             component: Checkout,
             meta:{
                 title: 'checkout'

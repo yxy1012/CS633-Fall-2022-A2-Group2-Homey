@@ -85,6 +85,9 @@ export default {
       }
     }
   },
+  created() {
+    this.form.email = this.$route.query.email;
+  },
   methods: {
     register(){
       const _this=this

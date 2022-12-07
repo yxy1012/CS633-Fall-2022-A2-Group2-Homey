@@ -46,7 +46,7 @@
         <el-menu-item class="searchArea">
           <el-input v-model="searchContent" placeholder="" class="searchInput"></el-input>
           <el-button style="background-color: #e628a6;
-        position: relative; right: 6px; height: 74%; width: 25%;">
+        position: relative; right: 6px; height: 74%; width: 25%;" @click="goToShop">
             <i class="el-icon-search searchIcon"></i>
           </el-button>
         </el-menu-item>
@@ -75,6 +75,10 @@ export default {
       this.$store.commit('setEmail',null)
       sessionStorage.removeItem('userId')
       sessionStorage.removeItem('email')
+    },
+    goToShop(){
+      this.searchContent = '';
+      this.$router.push('/shopCatalog');
     }
   }
 }

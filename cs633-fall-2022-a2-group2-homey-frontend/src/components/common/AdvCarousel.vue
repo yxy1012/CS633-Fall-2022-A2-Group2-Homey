@@ -2,7 +2,9 @@
   <div>
     <el-carousel height="600px">
       <el-carousel-item v-for="(item, index) in advList" :key="index">
-        <el-image :src="item"></el-image>
+        <router-link to="/ShopCatalog">
+          <el-image :src="item"></el-image>
+        </router-link>
       </el-carousel-item>
     </el-carousel>
   </div>

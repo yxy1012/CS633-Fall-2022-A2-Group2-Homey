@@ -1,13 +1,11 @@
 package com.group2.cs633fall2022a2group2homeybackend.controller;
 
 import com.group2.cs633fall2022a2group2homeybackend.entity.Shoppingcarts;
-import com.group2.cs633fall2022a2group2homeybackend.entity.Wishlist;
 import com.group2.cs633fall2022a2group2homeybackend.repository.ShoppingcartsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-//import java.util.Optional;
 
 @RestController
 @RequestMapping("/shoppingcarts")

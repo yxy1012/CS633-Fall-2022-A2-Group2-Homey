@@ -17,10 +17,14 @@
     <div class="latestList">
       <el-row>
         <el-col :span="6" v-for="(item, index) in latestList" :key="index" class="latestItem">
-          <el-image :src="item.image"></el-image>
-          <span style="float: left">{{ item.name }}</span>
-          <span style="float: right; color: red; text-decoration: line-through">{{ item.originalPrice }}</span>
-          <span style="float: right">{{ item.price }}</span>
+          <router-link :to = "{path: '/productDetails', query: {id: item.id}}" style="color: #000000">
+            <el-image :src="item.image" style="height: 220px; width: 100%"></el-image>
+            <span style="float: left">{{ item.name }}</span>
+            <span style="float: right; color: red; text-decoration: line-through;">
+              {{ item.original_price ? "$" + item.original_price.toFixed(2) : item.original_price }}
+            </span>
+            <span style="float: right;">{{ item.price ? "$" + item.price.toFixed(2) : item.price }}</span>
+          </router-link>
         </el-col>
       </el-row>
     </div>
@@ -35,7 +39,7 @@ export default {
       type: Array,
       default: () => ([])
     }
-  }
+  },
 }
 </script>
 

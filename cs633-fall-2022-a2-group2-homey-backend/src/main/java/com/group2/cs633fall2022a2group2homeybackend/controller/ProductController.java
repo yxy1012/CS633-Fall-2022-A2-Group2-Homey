@@ -3,6 +3,8 @@ package com.group2.cs633fall2022a2group2homeybackend.controller;
 import com.group2.cs633fall2022a2group2homeybackend.entity.Product;
 import com.group2.cs633fall2022a2group2homeybackend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,5 +20,10 @@ public class ProductController {
     @RequestMapping("/findAll")
     public List<Product> findAll(){
         return productRepository.findAll();
+    }
+
+    @GetMapping("/findById/{id}")
+    public Product findById(@PathVariable("id") Integer id){
+        return productRepository.findById(id).get();
     }
 }

@@ -17,9 +17,12 @@ public class User {
     private Integer id;
     private String username;
     private String password;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
+    private String first_name;
+    private String last_name;
+    private String phone_number;
     private String email;
     private String address;
+    private String apartment;
+    private String city;
+    private String postal_code;
 }

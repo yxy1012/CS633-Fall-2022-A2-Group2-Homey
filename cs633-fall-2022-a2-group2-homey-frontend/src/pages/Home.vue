@@ -31,64 +31,16 @@ export default {
         {
           image: require('../assets/featured1.png'),
           name: 'Cantilever chair',
-          price: '$42.00',
-          id: 'Code - Y523201'
-        },
-        {
-          image: require('../assets/featured1.png'),
-          name: 'Cantilever chair',
-          price: '$42.00',
-          id: 'Code - Y523201'
-        },
-        {
-          image: require('../assets/featured1.png'),
-          name: 'Cantilever chair',
-          price: '$42.00',
-          id: 'Code - Y523201'
-        },
-        {
-          image: require('../assets/featured1.png'),
-          name: 'Cantilever chair',
-          price: '$42.00',
-          id: 'Code - Y523201'
+          price: 42.00,
+          code: 'Code - Y523201'
         }
       ],
       latestList:[
         {
           image: require('../assets/latestImage1.png'),
           name: 'Comfort Handy Craft',
-          originalPrice: '$65.00',
-          price: '$42.00'
-        },
-        {
-          image: require('../assets/latestImage1.png'),
-          name: 'Comfort Handy Craft',
-          originalPrice: '$65.00',
-          price: '$42.00'
-        },
-        {
-          image: require('../assets/latestImage1.png'),
-          name: 'Comfort Handy Craft',
-          originalPrice: '$65.00',
-          price: '$42.00'
-        },
-        {
-          image: require('../assets/latestImage1.png'),
-          name: 'Comfort Handy Craft',
-          originalPrice: '$65.00',
-          price: '$42.00'
-        },
-        {
-          image: require('../assets/latestImage1.png'),
-          name: 'Comfort Handy Craft',
-          originalPrice: '$65.00',
-          price: '$42.00'
-        },
-        {
-          image: require('../assets/latestImage1.png'),
-          name: 'Comfort Handy Craft',
-          originalPrice: '$65.00',
-          price: '$42.00'
+          original_price: 65.00,
+          price: 42.00
         }
       ],
       homeyOffers:[
@@ -106,6 +58,7 @@ export default {
         }
       ],
       uniqueProduct: {
+        id: 2,
         image: require('../assets/uniqueProduct.png'),
         details: [
           'All frames constructed with hardwood solids and laminates',
@@ -119,26 +72,8 @@ export default {
         {
           image: require('../assets/featured1.png'),
           name: 'Cantilever chair',
-          price: '$42.00',
-          originalPrice: '$65'
-        },
-        {
-          image: require('../assets/featured1.png'),
-          name: 'Cantilever chair',
-          price: '$42.00',
-          originalPrice: '$65'
-        },
-        {
-          image: require('../assets/featured1.png'),
-          name: 'Cantilever chair',
-          price: '$42.00',
-          originalPrice: '$65'
-        },
-        {
-          image: require('../assets/featured1.png'),
-          name: 'Cantilever chair',
-          price: '$42.00',
-          originalPrice: '$65'
+          price: 42.00,
+          original_price: 65.00
         }
       ],
       trendCard1: require('../assets/trendCard1.png'),
@@ -147,25 +82,35 @@ export default {
         {
           image: require('../assets/trendImage.png'),
           name: 'Executive Seat Chair',
-          originalPrice: '$32'
-        },
-        {
-          image: require('../assets/trendImage.png'),
-          name: 'Executive Seat Chair',
-          originalPrice: '$32'
-        },
-        {
-          image: require('../assets/trendImage.png'),
-          name: 'Executive Seat Chair',
-          originalPrice: '$32'
+          original_price: 32.00
         }
       ],
     }
   },
-  methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    }
+  created () {
+    const _this=this
+    axios.get('http://localhost:8181/product/findAll').then(function (resp) {
+      console.log(resp)
+      let featuredList = [];
+      let latestList = [];
+      let trendingList = [];
+      let sideList = [];
+      resp.data.forEach(item => {
+        if(item.type == 1){
+          featuredList.push(item);
+        }else if(item.type == 2){
+          latestList.push(item);
+        }else if(item.type == 3){
+          trendingList.push(item);
+        }else if(item.type == 4){
+          sideList.push(item);
+        }
+      })
+      _this.featuredList = featuredList;
+      _this.latestList = latestList;
+      _this.trendingList = trendingList;
+      _this.sideList = sideList;
+    })
   }
 }
 </script>

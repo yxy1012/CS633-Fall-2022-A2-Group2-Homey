@@ -8,20 +8,20 @@
           <el-row>
             <el-col :span="3">
               <el-row v-for="(item, index) in productDetails.detailImages" :key="index">
-                <el-image :src="item"></el-image>
+                <el-image :src="item" style="height: 95px; width: 80%"></el-image>
               </el-row>
             </el-col>
             <el-col :span="8">
-              <el-image :src="productDetails.mainImage"></el-image>
+              <el-image :src="productDetails.image" style="height: 300px; width: 90%"></el-image>
             </el-col>
             <el-col :span="12" style="text-align: left">
               <h1>{{ productDetails.name }}</h1>
               <el-row style="margin-bottom: 3%">
                 <el-col :span="3">
-                  {{ productDetails.price }}
+                  {{ productDetails.price ? "$" + productDetails.price.toFixed(2) : productDetails.price }}
                 </el-col>
                 <el-col :span="3" style="color: red; text-decoration: line-through">
-                  {{ productDetails.originalPrice }}
+                  {{ productDetails.original_price ? "$" + productDetails.original_price.toFixed(2) : productDetails.original_price }}
                 </el-col>
               </el-row>
               <el-row class="darkGrey" style="margin-bottom: 3%">
@@ -32,10 +32,10 @@
                   <el-input-number v-model="num" @change="handleChange" :min="1" :max="15" size="small"></el-input-number>
                 </el-col>
                 <el-col :span="5" style="padding-top: 1%">
-                  <el-link :underline="false">Add to Cart</el-link>
+                  <el-link :underline="false" @click="addToCart">Add to Cart</el-link>
                 </el-col>
                 <el-col :span="3" style="padding-top: 1%;">
-                  <el-link :underline="false"><i class="iconfont icon-aixin" style="font-size: large"></i></el-link>
+                  <el-link :underline="false" @click="addToWishlist"><i class="iconfont icon-aixin" style="font-size: large"></i></el-link>
                 </el-col>
               </el-row>
               <el-row>
@@ -58,12 +58,16 @@
         <div>
           <el-row>
             <el-col :span="5" v-for="(item, index) in relatedProducts" :key="index" class="relatedItem">
-              <el-image :src="item.image"></el-image>
-              <h4 style="margin: 0">{{ item.name }}</h4>
-              <el-row style="margin-top: 3%">
-                <el-col :span="6">{{ item.price }}</el-col>
-                <el-col style="color: red; text-decoration: line-through" :span="6">{{ item.originalPrice }}</el-col>
-              </el-row>
+              <router-link :to = "{path: '/productDetails', query: {id: item.id}}" style="text-decoration: none; color: #000000">
+                <el-image :src="item.image" style="height: 200px; width: 100%"></el-image>
+                <h4 style="margin: 0">{{ item.name }}</h4>
+                <el-row style="margin-top: 3%">
+                  <el-col :span="6">{{ item.price ? "$" + item.price.toFixed(2) : item.price }}</el-col>
+                  <el-col style="color: red; text-decoration: line-through" :span="6">
+                    {{ item.original_price ? "$" + item.original_price.toFixed(2) : item.original_price }}
+                  </el-col>
+                </el-row>
+              </router-link>
             </el-col>
           </el-row>
         </div>
@@ -79,50 +83,123 @@ export default {
     return{
       productDetailsImage: require("@/assets/productDetailsImage.png"),
       productDetails:{
-        mainImage: require("@/assets/mainImage.png"),
+        image: require("@/assets/mainImage.png"),
         detailImages: [
             require("@/assets/detailImage1.png"),
             require("@/assets/detailImage2.png"),
             require("@/assets/detailImage3.png")
         ],
         name: "Bermund Chair",
-        originalPrice: "$42.00",
-        price: "$26.00",
+        original_price: 42.00,
+        price: 26.00,
         description: "The layer-glued bent wood frame gives the armchair a comfortable resilience, making it perfect to relax in.",
       },
       num: 1,
       shareIcon: require("@/assets/shareIcon2.png"),
       relatedProducts:[
         {
+          id: 1,
           image: require('../assets/relatedProduct.png'),
           name: 'Queen Chair',
-          originalPrice: '$85.00',
-          price: '$40.00'
+          original_price: 85.00,
+          price: 40.00
         },
         {
+          id: 1,
           image: require('../assets/relatedProduct.png'),
           name: 'Queen Chair',
-          originalPrice: '$85.00',
-          price: '$40.00'
+          original_price: 85.00,
+          price: 40.00
         },
         {
+          id: 1,
           image: require('../assets/relatedProduct.png'),
           name: 'Queen Chair',
-          originalPrice: '$85.00',
-          price: '$40.00'
+          original_price: 85.00,
+          price: 40.00
         },
         {
+          id: 1,
           image: require('../assets/relatedProduct.png'),
           name: 'Queen Chair',
-          originalPrice: '$85.00',
-          price: '$40.00'
+          original_price: 85.00,
+          price: 40.00
         },
       ],
+    }
+  },
+  created () {
+    const _this=this
+    axios.get('http://localhost:8181/product/findById/' + this.$route.query.id).then(function (resp) {
+      console.log(resp)
+      _this.productDetails = resp.data;
+      _this.productDetails.detailImages = [resp.data.image, resp.data.image, resp.data.image]
+    })
+    axios.get('http://localhost:8181/product/findAll').then(function (resp) {
+      console.log(resp)
+      let relatedProducts = [];
+      resp.data.forEach(item => {
+        if(item.type == 5){
+          relatedProducts.push(item);
+        }
+      })
+      _this.relatedProducts = relatedProducts;
+    })
+  },
+  watch: {
+    '$route' (to, from) {
+      this.$router.go(0);
     }
   },
   methods: {
     handleChange(value) {
       console.log(value);
+    },
+    addToCart(){
+      console.log(this.$store.getters.getUserId );
+      if(this.$store.getters.getUserId == null || ''){
+        this.$router.push('/login');
+      }else{
+        let shoppingcarts = {
+          quantity: this.num,
+          user: {id: this.$store.getters.getUserId},
+          product: {id: this.$route.query.id}
+        }
+        const _this = this
+        axios.post("http://localhost:8181/shoppingcarts/save", shoppingcarts).then(function (resp){
+          if(resp.data == "success"){
+            _this.$alert('Add Successfully','Info',{
+              confirmButtonText:'OK'
+            });
+          }else{
+            _this.$alert('Fail to Add','Warning',{
+              confirmButtonText:'OK'
+            });
+          }
+        })
+      }
+    },
+    addToWishlist(){
+      if(this.$store.getters.getUserId == null || ''){
+        this.$router.push('/login');
+      }else{
+        let wishlist = {
+          user: {id: this.$store.getters.getUserId},
+          product: {id: this.$route.query.id}
+        }
+        const _this = this
+        axios.post("http://localhost:8181/wishlist/save", wishlist).then(function (resp){
+          if(resp.data == "success"){
+            _this.$alert('Add Successfully','Info',{
+              confirmButtonText:'OK'
+            });
+          }else{
+            _this.$alert('Fail to Add','Warning',{
+              confirmButtonText:'OK'
+            });
+          }
+        })
+      }
     }
   }
 }
