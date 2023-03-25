@@ -73,7 +73,7 @@ export default {
       const _this=this
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          axios.get('http://localhost:8181/user/login/' + this.form.email + '/' + this.form.password).then(function (resp) {
+          axios.get(this.httpURL + '/user/login/' + this.form.email + '/' + this.form.password).then(function (resp) {
             console.log(resp)
             if(resp.data.login){
               sessionStorage.setItem('userId',resp.data.id)

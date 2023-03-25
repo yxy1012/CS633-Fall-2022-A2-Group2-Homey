@@ -67,6 +67,7 @@ export default new VueRouter({
         },
         {
             path: '/productDetails',
+            name:'productDetails',
             component: ProductDetails,
             meta:{
                 title: 'productDetails'

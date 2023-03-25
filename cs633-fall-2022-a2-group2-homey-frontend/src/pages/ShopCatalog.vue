@@ -89,7 +89,7 @@ export default {
   },
   created () {
     const _this = this
-    axios.get('http://localhost:8181/product/findAll').then(function (resp) {
+    axios.get(this.httpURL + '/product/findAll').then(function (resp) {
       console.log(resp)
       let allItems = [];
       let featuredList = [];

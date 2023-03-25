@@ -2,7 +2,7 @@
 <div>
   <AdvCarousel :adv-list="advList"></AdvCarousel>
   <FeaturedPro :featured-list="featuredList"></FeaturedPro>
-  <LatestPro :latest-list="latestList"></LatestPro>
+  <LatestPro :latest-list="latestList" :featured-list="featuredList" :trending-list="trendingList" :side-list="sideList"></LatestPro>
   <HomeyOffer :homey-offers="homeyOffers"></HomeyOffer>
   <UniquePro :unique-product="uniqueProduct"></UniquePro>
   <TrendingPro :trending-list="trendingList" :trend-card1="trendCard1" :trend-card2="trendCard2" :side-list="sideList"></TrendingPro>
@@ -23,9 +23,9 @@ export default {
     return {
       advList:[
         require('../assets/advImage1.png'),
-        require('../assets/advImage1.png'),
-        require('../assets/advImage1.png'),
-        require('../assets/advImage1.png')
+        require('../assets/advImage2.png'),
+        require('../assets/advImage3.png'),
+        require('../assets/advImage4.png')
       ],
       featuredList:[
         {
@@ -89,8 +89,7 @@ export default {
   },
   created () {
     const _this=this
-    axios.get('http://localhost:8181/product/findAll').then(function (resp) {
-      console.log(resp)
+    axios.get(this.httpURL + '/product/findAll').then(function (resp) {
       let featuredList = [];
       let latestList = [];
       let trendingList = [];

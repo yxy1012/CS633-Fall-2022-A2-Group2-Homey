@@ -42,7 +42,9 @@
                     <el-col :span="2">
                       <el-button circle style="color: #e628a6" @click="remove(index)"><i class="iconfont icon-aixin"></i></el-button>
                     </el-col>
-                    <el-col :span="2"><el-button icon="el-icon-zoom-in" circle></el-button></el-col>
+                    <el-col :span="2">
+                      <el-button icon="el-icon-zoom-in" circle @click="goToDetails(index)"></el-button>
+                    </el-col>
                   </el-row>
                 </div>
               </el-col>
@@ -63,6 +65,7 @@ export default {
       wishlist:[{
         id: 1,
         product:{
+          id: 1,
           name: "Mustard Chair",
           image: require("@/assets/wishItem1.png"),
           price: 42.00,
@@ -74,7 +77,7 @@ export default {
   },
   created () {
     const _this=this
-    axios.get('http://localhost:8181/wishlist/findByUserId/'+this.$store.getters.getUserId).then(function (resp) {
+    axios.get(this.httpURL + '/wishlist/findByUserId/'+this.$store.getters.getUserId).then(function (resp) {
       console.log(resp)
       _this.wishlist = resp.data
     })
@@ -88,7 +91,7 @@ export default {
       }).then(() => {
         let id = this.wishlist[index].id;
         const _this=this
-        axios.delete('http://localhost:8181/wishlist/deleteById/' + id).then(function (resp){
+        axios.delete(this.httpURL + '/wishlist/deleteById/' + id).then(function (resp){
           _this.wishlist.splice(index, 1);
         })
         this.$message({
@@ -109,7 +112,7 @@ export default {
         quantity: 1
       };
       const _this = this
-      axios.post('http://localhost:8181/shoppingcarts/save', shoppingcart).then(function (resp){
+      axios.post(this.httpURL + '/shoppingcarts/save', shoppingcart).then(function (resp){
         console.log(resp)
         if(resp.data == "success"){
           _this.$alert('Add Successfully','Info',{
@@ -121,6 +124,14 @@ export default {
           });
         }
       })
+    },
+    goToDetails(index){
+      this.$router.push({
+        name: "productDetails",
+        query: {
+          id: this.wishlist[index].product.id
+        }
+      });
     }
   }
 }

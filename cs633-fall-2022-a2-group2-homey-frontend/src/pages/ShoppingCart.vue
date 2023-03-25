@@ -137,7 +137,7 @@ export default {
   },
   created () {
     const _this=this
-    axios.get('http://localhost:8181/shoppingcarts/findByUserId/' + this.$store.getters.getUserId).then(function (resp) {
+    axios.get(this.httpURL + '/shoppingcarts/findByUserId/' + this.$store.getters.getUserId).then(function (resp) {
       console.log(resp)
       _this.tableData = resp.data
     })
@@ -154,7 +154,7 @@ export default {
       }).then(() => {
         let id = this.tableData[index].id;
         const _this=this
-        axios.delete('http://localhost:8181/shoppingcarts/deleteById/' + id).then(function (resp){
+        axios.delete(this.httpURL + '/shoppingcarts/deleteById/' + id).then(function (resp){
           _this.tableData.splice(index, 1);
         })
         this.$message({
@@ -175,7 +175,7 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        axios.put('http://localhost:8181/shoppingcarts/deleteAll', this.tableData).then(function (resp){
+        axios.put(this.httpURL + '/shoppingcarts/deleteAll', this.tableData).then(function (resp){
           _this.tableData = [];
         })
         this.$message({
@@ -194,6 +194,7 @@ export default {
         this.$router.push({
           name: "checkout",
           params: {
+            reorder: false,
             shoppingcarts: this.tableData
           }
         })
@@ -205,7 +206,7 @@ export default {
     },
     update(){
       const _this = this
-      axios.put('http://localhost:8181/shoppingcarts/update', this.tableData).then(function (resp){
+      axios.put(this.httpURL + '/shoppingcarts/update', this.tableData).then(function (resp){
         console.log(resp)
         if(resp.data == "success"){
           _this.$alert('Update Successfully','Info',{

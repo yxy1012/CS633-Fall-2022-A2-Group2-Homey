@@ -29,7 +29,7 @@
               </el-row>
               <el-row>
                 <el-col :span="8">
-                  <el-input-number v-model="num" @change="handleChange" :min="1" :max="15" size="small"></el-input-number>
+                  <el-input-number v-model="num" :min="1" :max="15" size="small"></el-input-number>
                 </el-col>
                 <el-col :span="5" style="padding-top: 1%">
                   <el-link :underline="false" @click="addToCart">Add to Cart</el-link>
@@ -130,12 +130,12 @@ export default {
   },
   created () {
     const _this=this
-    axios.get('http://localhost:8181/product/findById/' + this.$route.query.id).then(function (resp) {
+    axios.get(this.httpURL + '/product/findById/' + this.$route.query.id).then(function (resp) {
       console.log(resp)
       _this.productDetails = resp.data;
       _this.productDetails.detailImages = [resp.data.image, resp.data.image, resp.data.image]
     })
-    axios.get('http://localhost:8181/product/findAll').then(function (resp) {
+    axios.get(this.httpURL + '/product/findAll').then(function (resp) {
       console.log(resp)
       let relatedProducts = [];
       resp.data.forEach(item => {
@@ -152,11 +152,7 @@ export default {
     }
   },
   methods: {
-    handleChange(value) {
-      console.log(value);
-    },
     addToCart(){
-      console.log(this.$store.getters.getUserId );
       if(this.$store.getters.getUserId == null || ''){
         this.$router.push('/login');
       }else{
@@ -166,7 +162,7 @@ export default {
           product: {id: this.$route.query.id}
         }
         const _this = this
-        axios.post("http://localhost:8181/shoppingcarts/save", shoppingcarts).then(function (resp){
+        axios.post(this.httpURL + "/shoppingcarts/save", shoppingcarts).then(function (resp){
           if(resp.data == "success"){
             _this.$alert('Add Successfully','Info',{
               confirmButtonText:'OK'
@@ -188,7 +184,7 @@ export default {
           product: {id: this.$route.query.id}
         }
         const _this = this
-        axios.post("http://localhost:8181/wishlist/save", wishlist).then(function (resp){
+        axios.post(this.httpURL + "/wishlist/save", wishlist).then(function (resp){
           if(resp.data == "success"){
             _this.$alert('Add Successfully','Info',{
               confirmButtonText:'OK'

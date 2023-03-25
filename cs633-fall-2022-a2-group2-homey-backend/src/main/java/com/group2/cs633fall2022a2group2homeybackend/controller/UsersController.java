@@ -25,7 +25,7 @@ public class UsersController {
     @PostMapping("/save")
     public String save (@RequestBody User user){
         List list = userRepository.findByEmail(user.getEmail());
-        if(list.size() > 1){
+        if(list.size() >= 1){
             return "This email already exists";
         }else{
             User result = userRepository.save(user);

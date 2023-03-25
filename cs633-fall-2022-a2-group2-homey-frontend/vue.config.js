@@ -4,4 +4,5 @@ module.exports = defineConfig({
 })
 module.exports = {
   lintOnSave: false,
+  publicPath:'./'
 }

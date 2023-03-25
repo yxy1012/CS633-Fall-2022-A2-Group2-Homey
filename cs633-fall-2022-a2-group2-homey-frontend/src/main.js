@@ -9,6 +9,7 @@ import './plugins/axios.js'
 import store from './store/index.js'
 
 Vue.config.productionTip = false
+Vue.prototype.httpURL= 'http://ec2-18-223-206-255.us-east-2.compute.amazonaws.com:8181'
 
 Vue.use(ElementUI);
 

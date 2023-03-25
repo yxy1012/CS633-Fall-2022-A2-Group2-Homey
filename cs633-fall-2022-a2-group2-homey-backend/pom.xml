@@ -14,7 +14,7 @@
 	<name>cs633-fall-2022-a2-group2-homey-backend</name>
 	<description>cs633-fall-2022-a2-group2-homey-backend</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -47,7 +47,7 @@ export default {
         quantity: 1
       };
       const _this = this
-      axios.post('http://localhost:8181/shoppingcarts/save', shoppingcart).then(function (resp){
+      axios.post(this.httpURL + '/shoppingcarts/save', shoppingcart).then(function (resp){
         if(resp.data == "success"){
           _this.$alert('Add Successfully','Info',{
             confirmButtonText:'OK'

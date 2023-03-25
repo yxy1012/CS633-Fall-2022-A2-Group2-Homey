@@ -67,7 +67,7 @@ export default {
   },
   created () {
     const _this=this
-    axios.get('http://localhost:8181/orders/findByUserId/'+this.$store.getters.getUserId).then(function (resp) {
+    axios.get(this.httpURL + '/orders/findByUserId/'+this.$store.getters.getUserId).then(function (resp) {
       console.log(resp)
       _this.orderItems = resp.data
     })
@@ -77,6 +77,7 @@ export default {
       this.$router.push({
         name: "checkout",
         params: {
+          reorder: true,
           shoppingcarts: [
             {
               quantity: item.quantity,

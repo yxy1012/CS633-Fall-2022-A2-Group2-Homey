@@ -93,7 +93,7 @@ export default {
       const _this=this
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          axios.post('http://localhost:8181/user/save',this.form).then(function (resp) {
+          axios.post(this.httpURL + '/user/save',this.form).then(function (resp) {
             console.log(resp)
             if(resp.data == "success"){
               _this.$alert('success','Message',{

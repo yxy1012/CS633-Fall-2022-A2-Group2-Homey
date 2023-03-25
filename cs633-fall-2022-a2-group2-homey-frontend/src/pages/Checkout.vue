@@ -213,7 +213,7 @@ export default {
   created() {
     this.checkoutItems = this.$route.params.shoppingcarts;
     const _this = this;
-    axios.get("http://localhost:8181/user/findById/" + this.$store.getters.getUserId).then(function (resp){
+    axios.get(this.httpURL + "/user/findById/" + this.$store.getters.getUserId).then(function (resp){
       _this.user = resp.data
     })
   },
@@ -254,11 +254,15 @@ export default {
           checkoutItems.push(checkoutItem);
         });
         const _this = this;
-        axios.post('http://localhost:8181/orders/saveAll', checkoutItems).then(function (resp){
+        axios.post(this.httpURL + '/orders/saveAll', checkoutItems).then(function (resp){
           if(resp.data == "success"){
-            axios.put('http://localhost:8181/shoppingcarts/deleteAll', _this.checkoutItems).then(function (resp){
+            if(!_this.$route.params.reorder){
+              axios.put(_this.httpURL + '/shoppingcarts/deleteAll', _this.checkoutItems).then(function (resp){
+                _this.$router.push("/orderCompleted");
+              })
+            }else{
               _this.$router.push("/orderCompleted");
-            })
+            }
           }else{
             _this.$alert('Fail to Checkout','Warning',{
               confirmButtonText:'OK'
@@ -276,7 +280,7 @@ export default {
     },
     update(){
       const _this = this
-      axios.put('http://localhost:8181/user/update', this.user).then(function (resp){
+      axios.put(this.httpURL + '/user/update', this.user).then(function (resp){
         console.log(resp)
         if(resp.data == "success"){
           _this.$alert('Update Successfully','Info',{

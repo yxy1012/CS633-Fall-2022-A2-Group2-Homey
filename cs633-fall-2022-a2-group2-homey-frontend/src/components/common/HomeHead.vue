@@ -2,33 +2,32 @@
   <div>
     <div class="pageHeader">
       <el-row>
-        <el-col :span="5"><div class="grid-content"></div></el-col>
-        <el-col :span="3">
-          <div class="grid-content">
+        <el-col :span="5" class="grid-content"></el-col>
+        <el-col :span="4" class="headItem" id="email">
+          <div>
             <i class="el-icon-message r-spacing" v-if="this.$store.getters.getEmail"></i>{{ this.$store.getters.getEmail }}
           </div>
         </el-col>
-<!--        <el-col :span="3"><div class="grid-content"><i class="el-icon-phone-outline r-spacing"></i>{{ phone }}</div></el-col>-->
-        <el-col :span="8"><div class="grid-content"></div></el-col>
-        <el-col :span="3">
-          <router-link to="/login" style="text-decoration: none">
-            <div class="grid-content" v-if="this.$store.getters.getEmail" @click="loginOut">
+        <el-col :span="7" class="grid-content"></el-col>
+        <el-col :span="3" class="headItem">
+          <router-link to="/login" style="text-decoration: none; color: #FFFFFF">
+            <div v-if="this.$store.getters.getEmail" @click="loginOut">
               {{signOut}}<i class="el-icon-user l-spacing"></i>
             </div>
-            <div class="grid-content" v-else>{{login}}<i class="el-icon-user l-spacing"></i></div>
+            <div v-else>{{login}}<i class="el-icon-user l-spacing"></i></div>
           </router-link>
         </el-col>
-        <el-col :span="2" v-if="this.$store.getters.getEmail">
-          <router-link to="/wishlist" style="text-decoration: none">
-            <div class="grid-content">{{ wishlist }}<i class="iconfont icon-aixin l-spacing"></i></div>
+        <el-col :span="2" v-if="this.$store.getters.getEmail" class="headItem">
+          <router-link to="/wishlist" style="text-decoration: none; color: #FFFFFF">
+            <div>{{ wishlist }}<i class="iconfont icon-aixin l-spacing"></i></div>
           </router-link>
         </el-col>
-        <el-col :span="1" v-if="this.$store.getters.getEmail">
-          <router-link to="/shoppingCart" style="text-decoration: none">
-            <div class="grid-content chartIcon"><i class="el-icon-shopping-cart-2"></i></div>
+        <el-col :span="1" v-if="this.$store.getters.getEmail" class="headItem" id="cart">
+          <router-link to="/shoppingCart" style="text-decoration: none; color: #FFFFFF">
+            <div class="cartIcon"><i class="el-icon-shopping-cart-2"></i></div>
           </router-link>
         </el-col>
-        <el-col :span="2"><div class="grid-content"></div></el-col>
+        <el-col :span="2" class="grid-content"></el-col>
       </el-row>
     </div>
     <div class="topMenu">
@@ -41,8 +40,8 @@
         <el-menu-item index="/">Home</el-menu-item>
         <el-menu-item index="/shopCatalog">Shop</el-menu-item>
         <el-menu-item index="/myOrder">My Orders</el-menu-item>
-        <el-menu-item index="4">FAQ</el-menu-item>
-        <el-menu-item index="5">Contact Us</el-menu-item>
+<!--        <el-menu-item index="4">FAQ</el-menu-item>-->
+<!--        <el-menu-item index="5">Contact Us</el-menu-item>-->
         <el-menu-item class="searchArea">
           <el-input v-model="searchContent" placeholder="" class="searchInput"></el-input>
           <el-button style="background-color: #e628a6;
@@ -87,10 +86,15 @@ export default {
 <style scoped>
 .pageHeader{
   background-color: #6729e8;
-  width: 100%;
+  width: 100vw;
   height: 30px;
 }
-.chartIcon{
+.headItem{
+  color: #FFFFFF;
+  font-size: medium;
+  font-weight: bold;
+}
+.cartIcon{
   float: left;
 }
 .r-spacing{
@@ -102,14 +106,31 @@ export default {
 .logoArea{
   padding-left: 20%;
 }
-.searchArea{
-  padding-left: 5%;
-  width: 25%;
+.logoArea .el-image{
+  width: 180px;
+  height: 50px;
 }
-.searchInput{
-  width: 80%;
-}
-.searchIcon{
-  color: #FFFFFF;
+@media screen and (max-width: 480px){
+  #email{
+    width: 40vw;
+  }
+  #cart{
+    width: 8vw;
+  }
+  .logoArea + .el-menu-item{
+    margin-left: 20vw;
+  }
+  .headItem{
+    color: #FFFFFF;
+    font-size: medium;
+    font-weight: bold;
+    width: 25vw;
+  }
+  .grid-content{
+    display: none;
+  }
+  .logoArea{
+    width: 90vw;
+  }
 }
 </style>
