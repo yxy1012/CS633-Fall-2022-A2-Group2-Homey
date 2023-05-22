@@ -7,7 +7,7 @@
       <el-row>
         <el-col :span="5"><div class="grid-content"></div></el-col>
         <el-col :span="3" v-for="(item, index) in homeyOffers" :key="index" class="offerCard">
-          <el-card :body-style="{ padding: '0px'}">
+          <el-card :body-style="{padding: '0px'}">
             <el-image :src="item.image" style="width: 100%;height: 200px"></el-image>
           </el-card>
         </el-col>
@@ -22,7 +22,7 @@ export default {
   props:{
     homeyOffers:{
       type: Array,
-      default: () => ([])
+      default: []
     }
   }
 }

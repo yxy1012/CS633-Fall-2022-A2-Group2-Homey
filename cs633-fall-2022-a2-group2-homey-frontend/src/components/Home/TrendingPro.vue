@@ -10,9 +10,9 @@
             <div class="featuredDetail">
               <h4>{{ item.name }}</h4>
               <div>
-                <span>{{ item.price ? "$" + item.price.toFixed(2) : item.price }}</span>
+                <span>{{ item.price | priceFilter }}</span>
                 <span style="text-decoration: line-through; color: darkgrey; padding-left: 2%">
-                  {{ item.original_price ? "$" + item.original_price.toFixed(2) : item.original_price }}
+                  {{ item.original_price | priceFilter }}
                 </span>
               </div>
             </div>
@@ -38,7 +38,7 @@
       </el-col>
       <el-col :span="5" class="trendSide">
         <el-row v-for="(item, index) in sideList" :key="index" style="margin-bottom: 6%">
-          <router-link :to = "{path: '/productDetails', query: {id: item.id}}" style="color: #000000">
+          <router-link :to="{path: '/productDetails', query: {id: item.id}}" style="color: #000000">
             <el-col :span="8">
               <el-image :src="item.image" class="trendImage"></el-image>
             </el-col>
@@ -47,9 +47,9 @@
                 {{ item.name }}
               </el-row>
               <el-row style="float: left; text-decoration: line-through">
-                <el-col :span="12">{{ item.price ? "$" + item.price.toFixed(2) : item.price}}</el-col>
+                <el-col :span="12">{{ item.price | priceFilter}}</el-col>
                 <el-col :span="12" style="text-decoration: line-through; color: darkgrey">
-                  {{ item.original_price ? "$" + item.original_price.toFixed(2) : item.original_price}}
+                  {{ item.original_price | priceFilter}}
                 </el-col>
               </el-row>
             </el-col>
@@ -66,7 +66,7 @@ export default {
   props:{
     trendingList: {
       type: Array,
-      default: () => ([])
+      default: []
     },
     trendCard1:{
       type:String,
@@ -78,7 +78,7 @@ export default {
     },
     sideList:{
       type: Array,
-      default: () => ([])
+      default: []
     }
   },
   methods: {

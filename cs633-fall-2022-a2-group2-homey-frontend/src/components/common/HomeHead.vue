@@ -4,25 +4,21 @@
       <el-row>
         <el-col :span="5" class="grid-content"></el-col>
         <el-col :span="4" class="headItem" id="email">
-          <div>
-            <i class="el-icon-message r-spacing" v-if="this.$store.getters.getEmail"></i>{{ this.$store.getters.getEmail }}
-          </div>
+          <div><i class="el-icon-message r-spacing" v-if="getEmail"></i>{{getEmail}}</div>
         </el-col>
         <el-col :span="7" class="grid-content"></el-col>
         <el-col :span="3" class="headItem">
           <router-link to="/login" style="text-decoration: none; color: #FFFFFF">
-            <div v-if="this.$store.getters.getEmail" @click="loginOut">
-              {{signOut}}<i class="el-icon-user l-spacing"></i>
-            </div>
-            <div v-else>{{login}}<i class="el-icon-user l-spacing"></i></div>
+            <div v-if="getEmail" @click="loginOut">Sign Out<i class="el-icon-user l-spacing"></i></div>
+            <div v-else>Login<i class="el-icon-user l-spacing"></i></div>
           </router-link>
         </el-col>
-        <el-col :span="2" v-if="this.$store.getters.getEmail" class="headItem">
+        <el-col :span="2" v-if="getEmail" class="headItem">
           <router-link to="/wishlist" style="text-decoration: none; color: #FFFFFF">
-            <div>{{ wishlist }}<i class="iconfont icon-aixin l-spacing"></i></div>
+            <div>Wishlist<i class="iconfont icon-aixin l-spacing"></i></div>
           </router-link>
         </el-col>
-        <el-col :span="1" v-if="this.$store.getters.getEmail" class="headItem" id="cart">
+        <el-col :span="1" v-if="getEmail" class="headItem" id="cart">
           <router-link to="/shoppingCart" style="text-decoration: none; color: #FFFFFF">
             <div class="cartIcon"><i class="el-icon-shopping-cart-2"></i></div>
           </router-link>
@@ -31,23 +27,17 @@
       </el-row>
     </div>
     <div class="topMenu">
-      <el-menu :default-active="this.$router.path"  router class="el-menu-demo" mode="horizontal">
+      <el-menu :default-active="$router.path"  router class="el-menu-demo" mode="horizontal">
         <el-menu-item class="logoArea">
-          <router-link to="/">
-            <el-image :src="logoUrl" style="width: 180px; height: 50px"></el-image>
-          </router-link>
+          <router-link to="/"><el-image :src="logoUrl" style="width: 180px; height: 50px"></el-image></router-link>
         </el-menu-item>
         <el-menu-item index="/">Home</el-menu-item>
         <el-menu-item index="/shopCatalog">Shop</el-menu-item>
         <el-menu-item index="/myOrder">My Orders</el-menu-item>
-<!--        <el-menu-item index="4">FAQ</el-menu-item>-->
-<!--        <el-menu-item index="5">Contact Us</el-menu-item>-->
         <el-menu-item class="searchArea">
-          <el-input v-model="searchContent" placeholder="" class="searchInput"></el-input>
+          <el-input v-model="searchContent" class="searchInput"></el-input>
           <el-button style="background-color: #e628a6;
-        position: relative; right: 6px; height: 74%; width: 25%;" @click="goToShop">
-            <i class="el-icon-search searchIcon"></i>
-          </el-button>
+        position: relative; right: 6px; height: 74%; width: 25%;" @click="goToShop"><i class="el-icon-search searchIcon"></i></el-button>
         </el-menu-item>
       </el-menu>
     </div>
@@ -55,18 +45,17 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: "HomeHead",
   data(){
     return{
-      phone: '(617)717-2771',
-      login: 'Login',
-      signOut: 'Sign Out',
-      wishlist: 'Wishlist',
-      activeIndex: '1-1',
       logoUrl: require('../../assets/logo.png'),
       searchContent:''
     }
+  },
+  computed:{
+    ...mapGetters(['getEmail'])
   },
   methods:{
     loginOut(){
@@ -76,8 +65,8 @@ export default {
       sessionStorage.removeItem('email')
     },
     goToShop(){
-      this.searchContent = '';
-      this.$router.push('/shopCatalog');
+      this.searchContent = ''
+      this.$router.push('/shopCatalog')
     }
   }
 }

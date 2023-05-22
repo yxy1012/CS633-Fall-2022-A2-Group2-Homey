@@ -5,9 +5,7 @@
       <el-col :span="6"><div class="grid-content"></div></el-col>
       <el-col :span="14">
         <div class="continue">
-          <el-button style="background-color: #e628a6; color: #FFFFFF; width: 100%; line-height: 1.5" @click="backHome">
-            Continue Shopping
-          </el-button>
+          <el-button style="background-color: #e628a6; color: #FFFFFF; width: 100%; line-height: 1.5" @click="backHome">Continue Shopping</el-button>
         </div>
         <el-image :src="orderIsCompleted"></el-image>
       </el-col>

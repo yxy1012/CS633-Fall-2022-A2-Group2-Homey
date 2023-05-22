@@ -4,17 +4,14 @@
     <el-row>
       <el-col :span="4"><div class="grid-content"></div></el-col>
       <el-col :span="12">
-        <el-table
-            :data="tableData"
-            :empty-text="emptyText"
-            style="width: 100%">
+        <el-table :data="tableData" :empty-text="emptyText" style="width: 100%">
           <el-table-column width="320" style="position: relative">
             <template slot="header">
               <h2 style="color: black">Product</h2>
             </template>
-            <template v-slot:default="slotProps">
+            <template v-slot="slotProps">
               <el-row>
-                <el-col :span="8" >
+                <el-col :span="8">
                   <div class="deleteCartItem">
                     <el-link :underline="false" @click="deleteItem(slotProps.$index)">
                       <el-image :src="deleteCartItem" style="width: 30%"></el-image>
@@ -32,26 +29,24 @@
             <template slot="header">
               <h2 style="color: black">Price</h2>
             </template>
-            <template v-slot:default="slotProps">
-              {{ slotProps.row.product.price ? "$" + slotProps.row.product.price.toFixed(2) : "$" + slotProps.row.product.price }}
+            <template v-slot="slotProps">
+              {{ slotProps.row.product.price | priceFilter }}
             </template>
           </el-table-column>
           <el-table-column width="170">
             <template slot="header">
               <h2 style="color: black">Quantity</h2>
             </template>
-            <template v-slot:default="slotProps">
-              <el-input-number v-model="slotProps.row.quantity" @change="handleChange" :min="1" :max="15" size="mini"></el-input-number>
+            <template v-slot="slotProps">
+              <el-input-number v-model="slotProps.row.quantity" :min="1" :max="15" size="mini"></el-input-number>
             </template>
           </el-table-column>
           <el-table-column width="80">
             <template slot="header">
               <h2 style="color: black">Total</h2>
             </template>
-            <template v-slot:default="slotProps">
-              {{ slotProps.row.product.price * slotProps.row.quantity ?
-                "$" + (slotProps.row.product.price * slotProps.row.quantity).toFixed(2) :
-                "$" + slotProps.row.product.price * slotProps.row.quantity}}
+            <template v-slot="slotProps">
+              {{ slotProps.row.product.price * slotProps.row.quantity | priceFilter}}
             </template>
           </el-table-column>
         </el-table>
@@ -78,7 +73,7 @@
             </el-col>
             <el-col :span="12"><div class="grid-content"></div></el-col>
             <el-col :span="6" style="padding-top: 6%">
-              {{ subTotals?  "$" + subTotals.toFixed(2) : "$" + subTotals}}
+              {{ subTotals | priceFilter }}
             </el-col>
           </el-row>
           <div class="bottom-line"></div>
@@ -88,7 +83,7 @@
             </el-col>
             <el-col :span="12"><div class="grid-content"></div></el-col>
             <el-col :span="6" style="padding-top: 6%">
-              {{ totals ? "$" + totals.toFixed(2) : "$" + totals}}
+              {{ totals | priceFilter }}
             </el-col>
           </el-row>
           <div class="bottom-line"></div>
@@ -98,8 +93,7 @@
             </el-col>
             <el-col :span="18" style="font-size: small; text-align: left">Shipping & taxes calculated at checkout</el-col>
           </el-row>
-          <el-button style="background-color: rgb(98, 206, 121); color: #FFFFFF; width: 100%; margin-top: 5%"
-          @click="toCheckout">
+          <el-button style="background-color: rgb(98, 206, 121); color: #FFFFFF; width: 100%; margin-top: 5%" @click="toCheckout">
             Proceed To Checkout
           </el-button>
         </el-card>
@@ -135,59 +129,52 @@ export default {
       tip: require("@/assets/tip.png")
     }
   },
-  created () {
-    const _this=this
-    axios.get(this.httpURL + '/shoppingcarts/findByUserId/' + this.$store.getters.getUserId).then(function (resp) {
-      console.log(resp)
-      _this.tableData = resp.data
+  created(){
+    axios.get(this.httpURL + '/shoppingcarts/findByUserId/' + this.$store.getters.getUserId).then((resp)=>{
+      this.tableData = resp.data
     })
   },
-  methods: {
-    handleChange(value) {
-      console.log(value);
-    },
+  methods:{
     deleteItem(index){
       this.$confirm('Delete this item?', 'Warning', {
         confirmButtonText: 'Confirm',
         cancelButtonText: 'Cancel',
         type: 'warning'
-      }).then(() => {
-        let id = this.tableData[index].id;
-        const _this=this
-        axios.delete(this.httpURL + '/shoppingcarts/deleteById/' + id).then(function (resp){
-          _this.tableData.splice(index, 1);
+      }).then(()=>{
+        const id = this.tableData[index].id
+        axios.delete(this.httpURL + '/shoppingcarts/deleteById/' + id).then(()=>{
+          this.tableData.splice(index, 1);
         })
         this.$message({
           type: 'success',
           message: 'Delete Successfully'
-        });
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
           message: 'Cancel Deleting'
-        });
-      });
+        })
+      })
     },
     clear(){
-      const _this = this
       this.$confirm('Clear this cart?', 'Warning', {
         confirmButtonText: 'Confirm',
         cancelButtonText: 'Cancel',
         type: 'warning'
-      }).then(() => {
-        axios.put(this.httpURL + '/shoppingcarts/deleteAll', this.tableData).then(function (resp){
-          _this.tableData = [];
+      }).then(()=>{
+        axios.put(this.httpURL + '/shoppingcarts/deleteAll', this.tableData).then(()=>{
+          this.tableData = [];
         })
         this.$message({
           type: 'success',
           message: 'Delete Successfully'
-        });
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
           message: 'Cancel Clearing'
-        });
-      });
+        })
+      })
     },
     toCheckout(){
       if(this.tableData.length > 0){
@@ -195,45 +182,35 @@ export default {
           name: "checkout",
           params: {
             reorder: false,
-            shoppingcarts: this.tableData
+            shoppingCarts: this.tableData
           }
         })
       }else{
         this.$alert('No Items in the Shopping Cart','Warning',{
           confirmButtonText:'OK'
-        });
+        })
       }
     },
     update(){
-      const _this = this
-      axios.put(this.httpURL + '/shoppingcarts/update', this.tableData).then(function (resp){
-        console.log(resp)
-        if(resp.data == "success"){
-          _this.$alert('Update Successfully','Info',{
+      axios.put(this.httpURL + '/shoppingcarts/update', this.tableData).then((resp)=>{
+        if(resp.data === "success"){
+          this.$alert('Update Successfully','Info',{
             confirmButtonText:'OK'
-          });
+          })
         }else{
-          _this.$alert('Fail to Update','Warning',{
+          this.$alert('Fail to Update','Warning',{
             confirmButtonText:'OK'
-          });
+          })
         }
       })
     }
   },
-  computed: {
-    subTotals: function (){
-      let sum = 0;
-      this.tableData.forEach(item => {
-        sum += item.product.price * item.quantity
-      })
-      return sum;
+  computed:{
+    subTotals(){
+      return this.tableData.reduce((pre, cur)=>pre += cur.product.price * cur.quantity, 0)
     },
-    totals: function (){
-      let sum = 0;
-      this.tableData.forEach(item => {
-        sum += item.product.price * item.quantity
-      })
-      return sum;
+    totals(){
+      return this.tableData.reduce((pre, cur)=>pre += cur.product.price * cur.quantity, 0)
     }
   }
 }

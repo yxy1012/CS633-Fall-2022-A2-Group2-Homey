@@ -34,28 +34,25 @@ export default {
   props:{
     uniqueProduct:{
       type: Object,
-      default: function(){
-        return {};
-      }
+      default: {}
     }
   },
-  methods: {
+  methods:{
     addToCart(){
-      let shoppingcart = {
+      const shoppingCart = {
         user: {id: this.$store.getters.getUserId},
         product: {id: this.uniqueProduct.id},
         quantity: 1
-      };
-      const _this = this
-      axios.post(this.httpURL + '/shoppingcarts/save', shoppingcart).then(function (resp){
-        if(resp.data == "success"){
-          _this.$alert('Add Successfully','Info',{
+      }
+      axios.post(this.httpURL + '/shoppingcarts/save', shoppingCart).then((resp)=>{
+        if(resp.data === "success"){
+          this.$alert('Add Successfully','Info',{
             confirmButtonText:'OK'
-          });
+          })
         }else{
-          _this.$alert('Fail to Add','Warning',{
+          this.$alert('Fail to Add','Warning',{
             confirmButtonText:'OK'
-          });
+          })
         }
       })
     }

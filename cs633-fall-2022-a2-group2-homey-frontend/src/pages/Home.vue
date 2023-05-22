@@ -1,11 +1,11 @@
 <template>
 <div>
-  <AdvCarousel :adv-list="advList"></AdvCarousel>
-  <FeaturedPro :featured-list="featuredList"></FeaturedPro>
-  <LatestPro :latest-list="latestList" :featured-list="featuredList" :trending-list="trendingList" :side-list="sideList"></LatestPro>
-  <HomeyOffer :homey-offers="homeyOffers"></HomeyOffer>
-  <UniquePro :unique-product="uniqueProduct"></UniquePro>
-  <TrendingPro :trending-list="trendingList" :trend-card1="trendCard1" :trend-card2="trendCard2" :side-list="sideList"></TrendingPro>
+  <AdvCarousel :adv-list="advList"/>
+  <FeaturedPro :featured-list="featuredList"/>
+  <LatestPro :latest-list="latestList" :featured-list="featuredList" :trending-list="trendingList" :side-list="sideList"/>
+  <HomeyOffer :homey-offers="homeyOffers"/>
+  <UniquePro :unique-product="uniqueProduct"/>
+  <TrendingPro :trending-list="trendingList" :trend-card1="trendCard1" :trend-card2="trendCard2" :side-list="sideList"/>
 </div>
 </template>
 
@@ -32,7 +32,7 @@ export default {
           image: require('../assets/featured1.png'),
           name: 'Cantilever chair',
           price: 42.00,
-          code: 'Code - Y523201'
+          code: 'Y523201'
         }
       ],
       latestList:[
@@ -87,33 +87,28 @@ export default {
       ],
     }
   },
-  created () {
-    const _this=this
-    axios.get(this.httpURL + '/product/findAll').then(function (resp) {
+  created(){
+    axios.get(this.httpURL + '/product/findAll').then((resp)=>{
       let featuredList = [];
       let latestList = [];
       let trendingList = [];
       let sideList = [];
       resp.data.forEach(item => {
-        if(item.type == 1){
+        if(item.type === 1){
           featuredList.push(item);
-        }else if(item.type == 2){
+        }else if(item.type === 2){
           latestList.push(item);
-        }else if(item.type == 3){
+        }else if(item.type === 3){
           trendingList.push(item);
-        }else if(item.type == 4){
+        }else if(item.type === 4){
           sideList.push(item);
         }
       })
-      _this.featuredList = featuredList;
-      _this.latestList = latestList;
-      _this.trendingList = trendingList;
-      _this.sideList = sideList;
+      this.featuredList = featuredList;
+      this.latestList = latestList;
+      this.trendingList = trendingList;
+      this.sideList = sideList;
     })
   }
 }
 </script>
-
-<style scoped>
-
-</style>

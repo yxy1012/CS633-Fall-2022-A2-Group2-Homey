@@ -20,20 +20,20 @@
                 <el-image :src="item.product.image"></el-image>
               </el-col>
               <el-col :span="16">
-                <h3 style="color: #000000;margin-bottom: 2%;text-align: left;">{{item.product.name}}</h3>
+                <h3 style="color: #000000;margin-bottom: 2%;text-align: left;">{{ item.product.name }}</h3>
                 <div style="text-align: left; font-size: smaller; margin-bottom: 2%;">
                   <el-row class="price">
                     <el-col :span="2">
-                      {{item.product.price ? "$" + item.product.price.toFixed(2) : item.price}}
+                      {{ item.product.price | priceFilter }}
                     </el-col>
                     <el-col :span="2">
                       <div style="color: red; text-decoration: line-through">
-                        {{item.product.original_price ? "$" + item.product.original_price.toFixed(2) : item.product.original_price}}
+                        {{ item.product.original_price | priceFilter }}
                       </div>
                     </el-col>
                   </el-row>
                   <el-row class="darkGrey">
-                    {{item.product.description}}
+                    {{ item.product.description }}
                   </el-row>
                   <el-row class="orderItemDetail">
                     <el-col :span="2">
@@ -76,10 +76,8 @@ export default {
     }
   },
   created () {
-    const _this=this
-    axios.get(this.httpURL + '/wishlist/findByUserId/'+this.$store.getters.getUserId).then(function (resp) {
-      console.log(resp)
-      _this.wishlist = resp.data
+    axios.get(this.httpURL + '/wishlist/findByUserId/'+this.$store.getters.getUserId).then((resp)=>{
+      this.wishlist = resp.data
     })
   },
   methods:{
@@ -88,40 +86,37 @@ export default {
         confirmButtonText: 'Confirm',
         cancelButtonText: 'Cancel',
         type: 'warning'
-      }).then(() => {
-        let id = this.wishlist[index].id;
-        const _this=this
-        axios.delete(this.httpURL + '/wishlist/deleteById/' + id).then(function (resp){
-          _this.wishlist.splice(index, 1);
+      }).then(()=>{
+        const id = this.wishlist[index].id;
+        axios.delete(this.httpURL + '/wishlist/deleteById/' + id).then(()=>{
+          this.wishlist.splice(index, 1);
         })
         this.$message({
           type: 'success',
           message: 'Remove Successfully'
-        });
-      }).catch(() => {
+        })
+      }).catch(()=>{
         this.$message({
           type: 'info',
           message: 'Cancel Removing'
-        });
-      });
+        })
+      })
     },
     addToCart(index){
-      let shoppingcart = {
+      const shoppingCart = {
         user: {id: this.$store.getters.getUserId},
         product: {id: this.wishlist[index].product.id},
         quantity: 1
-      };
-      const _this = this
-      axios.post(this.httpURL + '/shoppingcarts/save', shoppingcart).then(function (resp){
-        console.log(resp)
-        if(resp.data == "success"){
-          _this.$alert('Add Successfully','Info',{
+      }
+      axios.post(this.httpURL + '/shoppingcarts/save', shoppingCart).then((resp)=>{
+        if(resp.data === "success"){
+          this.$alert('Add Successfully','Info',{
             confirmButtonText:'OK'
-          });
+          })
         }else{
-          _this.$alert('Fail to Add','Warning',{
+          this.$alert('Fail to Add','Warning',{
             confirmButtonText:'OK'
-          });
+          })
         }
       })
     },
@@ -131,7 +126,7 @@ export default {
         query: {
           id: this.wishlist[index].product.id
         }
-      });
+      })
     }
   }
 }

@@ -20,16 +20,16 @@
                 <el-image :src="item.product.image"></el-image>
               </el-col>
               <el-col :span="4">
-                <h3 style="color: #000000;margin-bottom: 5%;text-align: left;">Order# {{item.id}}</h3>
+                <h3 style="color: #000000;margin-bottom: 5%;text-align: left;">Order# {{ item.id }}</h3>
                 <div style="text-align: left; font-size: smaller; margin-bottom: 5%;">
                   <div class="orderItemDetail">
-                    {{ item.total_amount ? "$" + item.total_amount.toFixed(2) : "$" + item.total_amount}}
+                    {{ item.total_amount | priceFilter}}
                   </div>
                   <div class="darkGrey orderItemDetail">{{ item.quantity }} items</div>
                   <el-row class="orderItemDetail">
-                    <el-col class="darkGrey" :span="8">{{item.date}}</el-col>
+                    <el-col class="darkGrey" :span="8">{{ item.date }}</el-col>
                     <el-col class="darkGrey" :span="2">-</el-col>
-                    <el-col class="darkGrey" :span="4">{{item.status}}</el-col>
+                    <el-col class="darkGrey" :span="4">{{ item.status }}</el-col>
                   </el-row>
                 </div>
                 <el-button style="background-color: #e628a6; color: #FFFFFF; float: left; width: 90%" @click="reorder(item)">
@@ -66,10 +66,8 @@ export default {
     }
   },
   created () {
-    const _this=this
-    axios.get(this.httpURL + '/orders/findByUserId/'+this.$store.getters.getUserId).then(function (resp) {
-      console.log(resp)
-      _this.orderItems = resp.data
+    axios.get(this.httpURL + '/orders/findByUserId/'+this.$store.getters.getUserId).then((resp)=>{
+      this.orderItems = resp.data
     })
   },
   methods: {
@@ -78,7 +76,7 @@ export default {
         name: "checkout",
         params: {
           reorder: true,
-          shoppingcarts: [
+          shoppingCarts: [
             {
               quantity: item.quantity,
               product: item.product,
@@ -86,7 +84,7 @@ export default {
             }
           ]
         }
-      });
+      })
     }
   }
 }

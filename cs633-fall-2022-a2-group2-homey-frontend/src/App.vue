@@ -16,7 +16,7 @@ import Brands from "@/components/common/Brands";
 export default {
   name: 'App',
   components: {CopyRight, PageFooter, HomeHead, Brands},
-  created() {
+  created(){
     if (sessionStorage.getItem('store')) {
       this.$store.replaceState(
           Object.assign(
@@ -26,7 +26,7 @@ export default {
           )
       )
     }
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener('beforeunload', ()=>{
       sessionStorage.setItem('store', JSON.stringify(this.$store.state))
     })
   },

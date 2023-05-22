@@ -18,10 +18,10 @@
               <h1>{{ productDetails.name }}</h1>
               <el-row style="margin-bottom: 3%">
                 <el-col :span="3">
-                  {{ productDetails.price ? "$" + productDetails.price.toFixed(2) : productDetails.price }}
+                  {{ productDetails.price | priceFilter }}
                 </el-col>
                 <el-col :span="3" style="color: red; text-decoration: line-through">
-                  {{ productDetails.original_price ? "$" + productDetails.original_price.toFixed(2) : productDetails.original_price }}
+                  {{ productDetails.original_price | priceFilter }}
                 </el-col>
               </el-row>
               <el-row class="darkGrey" style="margin-bottom: 3%">
@@ -62,9 +62,9 @@
                 <el-image :src="item.image" style="height: 200px; width: 100%"></el-image>
                 <h4 style="margin: 0">{{ item.name }}</h4>
                 <el-row style="margin-top: 3%">
-                  <el-col :span="6">{{ item.price ? "$" + item.price.toFixed(2) : item.price }}</el-col>
+                  <el-col :span="6">{{ item.price | priceFilter }}</el-col>
                   <el-col style="color: red; text-decoration: line-through" :span="6">
-                    {{ item.original_price ? "$" + item.original_price.toFixed(2) : item.original_price }}
+                    {{ item.original_price | priceFilter }}
                   </el-col>
                 </el-row>
               </router-link>
@@ -77,8 +77,10 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
 export default {
   name: "ProductDetails",
+  props:['productId'],
   data(){
     return{
       productDetailsImage: require("@/assets/productDetailsImage.png"),
@@ -128,71 +130,64 @@ export default {
       ],
     }
   },
+  computed:{
+    ...mapGetters(['getUserId'])
+  },
   created () {
-    const _this=this
-    axios.get(this.httpURL + '/product/findById/' + this.$route.query.id).then(function (resp) {
-      console.log(resp)
-      _this.productDetails = resp.data;
-      _this.productDetails.detailImages = [resp.data.image, resp.data.image, resp.data.image]
+    axios.get(this.httpURL + '/product/findById/' + this.productId).then((resp)=>{
+      this.productDetails = resp.data;
+      this.productDetails.detailImages = [resp.data.image, resp.data.image, resp.data.image]
     })
-    axios.get(this.httpURL + '/product/findAll').then(function (resp) {
-      console.log(resp)
+    axios.get(this.httpURL + '/product/findAll').then((resp)=>{
       let relatedProducts = [];
       resp.data.forEach(item => {
-        if(item.type == 5){
+        if(item.type === 5){
           relatedProducts.push(item);
         }
       })
-      _this.relatedProducts = relatedProducts;
+      this.relatedProducts = relatedProducts;
     })
-  },
-  watch: {
-    '$route' (to, from) {
-      this.$router.go(0);
-    }
   },
   methods: {
     addToCart(){
-      if(this.$store.getters.getUserId == null || ''){
+      if(this.getUserId === null || ''){
         this.$router.push('/login');
       }else{
-        let shoppingcarts = {
+        let shoppingCarts = {
           quantity: this.num,
-          user: {id: this.$store.getters.getUserId},
-          product: {id: this.$route.query.id}
+          user: {id: this.getUserId},
+          product: {id: this.productId}
         }
-        const _this = this
-        axios.post(this.httpURL + "/shoppingcarts/save", shoppingcarts).then(function (resp){
-          if(resp.data == "success"){
-            _this.$alert('Add Successfully','Info',{
+        axios.post(this.httpURL + "/shoppingcarts/save", shoppingCarts).then((resp)=>{
+          if(resp.data === "success"){
+            this.$alert('Add Successfully','Info',{
               confirmButtonText:'OK'
-            });
+            })
           }else{
-            _this.$alert('Fail to Add','Warning',{
+            this.$alert('Fail to Add','Warning',{
               confirmButtonText:'OK'
-            });
+            })
           }
         })
       }
     },
     addToWishlist(){
-      if(this.$store.getters.getUserId == null || ''){
+      if(this.getUserId === null || ''){
         this.$router.push('/login');
       }else{
         let wishlist = {
-          user: {id: this.$store.getters.getUserId},
-          product: {id: this.$route.query.id}
+          user: {id: this.getUserId},
+          product: {id: this.productId}
         }
-        const _this = this
-        axios.post(this.httpURL + "/wishlist/save", wishlist).then(function (resp){
-          if(resp.data == "success"){
-            _this.$alert('Add Successfully','Info',{
+        axios.post(this.httpURL + "/wishlist/save", wishlist).then((resp)=>{
+          if(resp.data === "success"){
+            this.$alert('Add Successfully','Info',{
               confirmButtonText:'OK'
-            });
+            })
           }else{
-            _this.$alert('Fail to Add','Warning',{
+            this.$alert('Fail to Add','Warning',{
               confirmButtonText:'OK'
-            });
+            })
           }
         })
       }

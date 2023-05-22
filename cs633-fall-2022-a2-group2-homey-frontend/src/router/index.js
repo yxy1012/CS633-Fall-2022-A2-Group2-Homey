@@ -1,5 +1,5 @@
+import Vue from "vue";
 import VueRouter from 'vue-router'
-import Vue from 'vue'
 import Home from '@/pages/Home'
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
@@ -11,9 +11,10 @@ import ProductDetails from "@/pages/ProductDetails";
 import ShoppingCart from "@/pages/ShoppingCart";
 import Checkout from "@/pages/Checkout";
 import OrderCompleted from "@/pages/OrderCompleted";
+
 Vue.use(VueRouter)
 
-export default new VueRouter({
+const router =  new VueRouter({
     scrollBehavior (to, from, savedPosition) {
         if (savedPosition) {
             return savedPosition
@@ -33,7 +34,7 @@ export default new VueRouter({
             path: '/login',
             component: Login,
             meta:{
-                title: 'login'
+                title: 'Login'
             }
         },
         {
@@ -41,28 +42,28 @@ export default new VueRouter({
             name: 'register',
             component: Register,
             meta:{
-                title: 'register'
+                title: 'Register'
             }
         },
         {
             path: '/shopCatalog',
             component: ShopCatalog,
             meta:{
-                title: 'shopCatalog'
+                title: 'Shop Catalog'
             }
         },
         {
             path: '/myOrder',
             component: MyOrder,
             meta:{
-                title: 'myOrder'
+                title: 'My Order'
             }
         },
         {
             path: '/wishlist',
             component: Wishlist,
             meta:{
-                title: 'wishlist'
+                title: 'Wishlist'
             }
         },
         {
@@ -70,14 +71,17 @@ export default new VueRouter({
             name:'productDetails',
             component: ProductDetails,
             meta:{
-                title: 'productDetails'
+                title: 'Product Details'
+            },
+            props($route){
+                return {productId: $route.query.id}
             }
         },
         {
             path: '/shoppingCart',
             component: ShoppingCart,
             meta:{
-                title: 'shoppingCart'
+                title: 'Shopping Cart'
             }
         },
         {
@@ -85,14 +89,14 @@ export default new VueRouter({
             name: 'checkout',
             component: Checkout,
             meta:{
-                title: 'checkout'
+                title: 'Checkout'
             }
         },
         {
             path: '/orderCompleted',
             component: OrderCompleted,
             meta:{
-                title: 'orderCompleted'
+                title: 'Order Completed'
             }
         },
         {
@@ -109,4 +113,9 @@ export default new VueRouter({
     ]
 })
 
+router.afterEach((to, from) => {
+    document.title = to.meta.title || 'Homey'
+})
+
+export default router
 

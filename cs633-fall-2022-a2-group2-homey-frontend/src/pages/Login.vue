@@ -6,24 +6,22 @@
         <el-col :span="9"><div class="grid-content"></div></el-col>
         <el-col :span="7">
           <el-card class="login">
-            <h2>{{ formTitle }}</h2>
-            <p class="hint">{{ hint }}</p>
+            <h2>Login</h2>
+            <p class="hint">Please login using account detail below.</p>
             <el-form ref="form" :model="form" :rules="rules">
               <el-form-item prop="email">
                 <el-input v-model="form.email" placeholder="Email Address"></el-input>
               </el-form-item>
               <el-form-item prop="password">
                 <el-input placeholder="Password" v-model="form.password" show-password></el-input>
-<!--                <a href="javascript:void(0);" class="forgot">{{ forgotPass }}</a>-->
+<!--                <a href="javascript:void(0);" class="forgot">Forgot your password?</a>-->
               </el-form-item>
               <el-form-item>
-                <el-button style="background-color: #e628a6; color: #FFFFFF; width: 100%" @click="login">
-                  {{ btnTitle }}
-                </el-button>
+                <el-button style="background-color: #e628a6; color: #FFFFFF; width: 100%" @click="login">Sign In</el-button>
               </el-form-item>
               <el-form-item>
-                <span class="darkGrey">{{ noAccount }}</span>
-                <router-link to="register">{{ createAccount }}</router-link>
+                <span class="darkGrey">Don't have an account?</span>
+                <router-link to="register">Create account</router-link>
               </el-form-item>
             </el-form>
           </el-card>
@@ -35,9 +33,9 @@
 
 <script>
 export default {
-  name: "Login.vue",
+  name: "Login",
   data(){
-    let checkEmail = (rule, value, callback) => {
+    const checkEmail = (rule, value, callback) => {
       const regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (regEmail.test(value)) {
         return callback();
@@ -46,16 +44,10 @@ export default {
     };
     return{
       myAccount: require("@/assets/myAccount.png"),
-      formTitle: "Login",
-      hint: "Please login using account detail below.",
       form: {
         email: "",
         password: ""
       },
-      forgotPass: "Forgot your password?",
-      btnTitle: "Sign In",
-      noAccount: "Don't have an account?",
-      createAccount: "Create account",
       rules:{
         email:[
           { required: true, message: 'Please enter your email', trigger: 'blur' },
@@ -70,27 +62,24 @@ export default {
   },
   methods: {
     login(){
-      const _this=this
-      this.$refs["form"].validate((valid) => {
+      this.$refs.form.validate((valid)=>{
         if (valid) {
-          axios.get(this.httpURL + '/user/login/' + this.form.email + '/' + this.form.password).then(function (resp) {
-            console.log(resp)
-            if(resp.data.login){
-              sessionStorage.setItem('userId',resp.data.id)
-              sessionStorage.setItem('email',resp.data.email)
-              _this.$store.commit('setUserId',resp.data.id)
-              _this.$store.commit('setEmail',resp.data.email)
-              _this.$router.push({
-                path:'/',
-              })
+          axios.get(this.httpURL + '/user/login/' + this.form.email + '/' + this.form.password).then((resp)=>{
+            const {login, id, email} = resp.data
+            if(login){
+              sessionStorage.setItem('userId', id)
+              sessionStorage.setItem('email', email)
+              this.$store.commit('setUserId', id)
+              this.$store.commit('setEmail', email)
+              this.$router.push({path:'/'})
             }else{
-              _this.$alert('Uncorrected password or email address','Alert');
+              this.$alert('Uncorrected password or email address','Alert');
             }
           })
         }else{
-          _this.$alert('Error email format or password format','Alert');
+          this.$alert('Error email format or password format','Alert');
         }
-      });
+      })
     }
   }
 }
@@ -111,6 +100,7 @@ a{
   color: darkgrey;
   text-decoration: none;
 }
+
 .forgot{
   float: left;
 }

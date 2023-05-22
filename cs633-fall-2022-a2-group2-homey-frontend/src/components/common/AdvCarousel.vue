@@ -16,7 +16,7 @@ export default {
   props:{
     advList:{
       type: Array,
-      default: () => ([])
+      default: []
     }
   }
 }

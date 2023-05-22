@@ -13,18 +13,12 @@
                 <h4 style="margin: 0; text-align: left">Contact Information</h4>
               </el-col>
               <el-col :span="8"><div class="grid-content"></div></el-col>
-<!--              <el-col :span="8" style="font-size: smaller">-->
-<!--                <span class="darkGrey">{{ haveAccount }}</span>-->
-<!--                <router-link to="login" class="darkGrey" style="text-decoration: none;">-->
-<!--                  {{ logIn }}-->
-<!--                </router-link>-->
-<!--              </el-col>-->
             </el-row>
             <el-row class="mgb-3">
               <el-input placeholder="Mobile phone number" v-model="user.phone_number"></el-input>
             </el-row>
             <el-row style="font-size: smaller">
-              <el-checkbox :label="upDate" name="type"></el-checkbox>
+              <el-checkbox :label="uptoDate" name="type"></el-checkbox>
             </el-row>
             <el-row style="margin-top: 10%" class="mgb-3">
               <h4 style="margin: 0; text-align: left">Shipping Address</h4>
@@ -81,14 +75,13 @@
                 <h5 style="text-align: left; margin-bottom: 0">{{ item.product.name }}</h5>
                 <el-row style="font-size: small">
                   <el-col class="darkGrey" :span="8">
-                    {{ item.product.price ? "$" + item.product.price.toFixed(2) : "$" + item.product.price }}
+                    {{ item.product.price | priceFilter }}
                   </el-col>
                   <el-col class="darkGrey" :span="8">{{ "*" + item.quantity }}</el-col>
                 </el-row>
               </el-col>
               <el-col :span="2" style="margin-top: 10%">
-                {{ item.product.price * item.quantity ?
-                  "$" + (item.product.price * item.quantity).toFixed(2) : "$" + item.product.price * item.quantity}}
+                {{ item.product.price * item.quantity | priceFilter }}
               </el-col>
             </el-row>
             <el-row>
@@ -103,7 +96,7 @@
                 </el-col>
                 <el-col :span="12"><div class="grid-content"></div></el-col>
                 <el-col :span="6" style="padding-top: 6%">
-                  {{ subTotals?  "$" + subTotals.toFixed(2) : "$" + subTotals}}
+                  {{ subTotals | priceFilter}}
                 </el-col>
               </el-row>
               <div class="bottom-line"></div>
@@ -113,7 +106,7 @@
                 </el-col>
                 <el-col :span="8"><div class="grid-content"></div></el-col>
                 <el-col :span="6" style="padding-top: 6%">
-                  {{ shippingAndTax ? "$" + shippingAndTax.toFixed(2) : "$" + shippingAndTax}}
+                  {{ shippingAndTax | priceFilter}}
                 </el-col>
               </el-row>
               <div class="bottom-line"></div>
@@ -123,12 +116,11 @@
                 </el-col>
                 <el-col :span="12"><div class="grid-content"></div></el-col>
                 <el-col :span="6" style="padding-top: 6%">
-                  {{ totals ? "$" + totals.toFixed(2) : "$" + totals}}
+                  {{ totals | priceFilter}}
                 </el-col>
               </el-row>
               <div class="bottom-line"></div>
-              <el-button style="background-color: rgb(98, 206, 121); color: #FFFFFF; width: 100%; margin-top: 5%"
-                         @click="toCheckout">
+              <el-button style="background-color: rgb(98, 206, 121); color: #FFFFFF; width: 100%; margin-top: 5%" @click="toCheckout">
                 Proceed To Checkout
               </el-button>
             </el-card>
@@ -145,9 +137,7 @@ export default {
   data(){
     return{
       checkout: require("@/assets/checkout.png"),
-      haveAccount: "Already have an account?",
-      logIn: "Log in",
-      upDate: "Keep me up to date on news and exclusive offers",
+      uptoDate: "Keep me up to date on news and exclusive offers",
       checkoutItems: [{
         id: 1,
         quantity: 2,
@@ -210,86 +200,74 @@ export default {
       }
     }
   },
-  created() {
-    this.checkoutItems = this.$route.params.shoppingcarts;
-    const _this = this;
-    axios.get(this.httpURL + "/user/findById/" + this.$store.getters.getUserId).then(function (resp){
-      _this.user = resp.data
+  created(){
+    this.checkoutItems = this.$route.params.shoppingCarts
+    axios.get(this.httpURL + "/user/findById/" + this.$store.getters.getUserId).then((resp)=>{
+      this.user = resp.data
     })
   },
   computed: {
-    subTotals: function (){
-      let sum = 0;
-      this.checkoutItems.forEach(item => {
-        sum += item.product.price * item.quantity
-      })
-      return sum;
+    subTotals(){
+      return this.checkoutItems.reduce((pre, cur)=>pre += cur.product.price * cur.quantity, 0);
     },
-    totals: function (){
-      let sum = 0;
-      this.checkoutItems.forEach(item => {
-        sum += item.product.price * item.quantity
-      })
-      return sum + this.shippingAndTax;
+    totals(){
+      return this.checkoutItems.reduce((pre, cur)=>pre += cur.product.price * cur.quantity, this.shippingAndTax)
     }
   },
-  methods: {
+  methods:{
     toCheckout(){
-      if(this.shippingAndTax != 0){
+      if(this.shippingAndTax !== 0){
         let checkoutItems = [];
-        this.checkoutItems.forEach(item => {
-          let date = new Date;
-          let checkoutItem = {
+        this.checkoutItems.forEach(item=>{
+          const date = new Date;
+          const checkoutItem = {
             quantity: item.quantity,
             total_amount: item.product.price * item.quantity,
             status: "Completed",
             date: date.toDateString().split( " " )[1] + " " + date.getDate(),
             user: {
-              "id": this.$store.getters.getUserId
+              id: this.$store.getters.getUserId
             },
             product: {
-              "id": item.product.id
+              id: item.product.id
             }
           }
           checkoutItems.push(checkoutItem);
-        });
-        const _this = this;
-        axios.post(this.httpURL + '/orders/saveAll', checkoutItems).then(function (resp){
-          if(resp.data == "success"){
-            if(!_this.$route.params.reorder){
-              axios.put(_this.httpURL + '/shoppingcarts/deleteAll', _this.checkoutItems).then(function (resp){
-                _this.$router.push("/orderCompleted");
+        })
+        axios.post(this.httpURL + '/orders/saveAll', checkoutItems).then((resp)=>{
+          if(resp.data === "success"){
+            if(!this.$route.params.reorder){
+              axios.put(this.httpURL + '/shoppingcarts/deleteAll', this.checkoutItems).then(()=>{
+                this.$router.push("/orderCompleted");
               })
             }else{
-              _this.$router.push("/orderCompleted");
+              this.$router.push("/orderCompleted");
             }
           }else{
-            _this.$alert('Fail to Checkout','Warning',{
+            this.$alert('Fail to Checkout','Warning',{
               confirmButtonText:'OK'
-            });
+            })
           }
         })
       }else{
         this.$alert('Please Calculate Shipping','Warning',{
           confirmButtonText:'OK'
-        });
+        })
       }
     },
     calculate(){
       this.shippingAndTax = this.subTotals * 0.08 + 5;
     },
     update(){
-      const _this = this
-      axios.put(this.httpURL + '/user/update', this.user).then(function (resp){
-        console.log(resp)
-        if(resp.data == "success"){
-          _this.$alert('Update Successfully','Info',{
+      axios.put(this.httpURL + '/user/update', this.user).then((resp)=>{
+        if(resp.data === "success"){
+          this.$alert('Update Successfully','Info',{
             confirmButtonText:'OK'
-          });
+          })
         }else{
-          _this.$alert('Fail to Update','Warning',{
+          this.$alert('Fail to Update','Warning',{
             confirmButtonText:'OK'
-          });
+          })
         }
       })
     }
